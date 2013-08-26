@@ -16,10 +16,10 @@ P2P on .Net Framework
 
 ##課題
 
-- System.Net.PeerToPeer.PeerCollaborationを敢えて使わないようにしたが、実際のものを作ろうとすると必要になるかもしれない。
+- System.Net.PeerToPeer.Collaborationを敢えて使わないようにしたが、実際のものを作ろうとすると必要になるかもしれない。
 - 他者が更新したら即座に取得したかったのだが、方法が分からずとりあえずタイマーで実装した。
   - てっきりイベントがあるものと思っていたのだが、見つけられていない。
-  - 前述のPeerCollaborationにはあるのかも。
+  - 前述のCollaborationにはあるのかも。
 - マシン内複数起動によるテストしかしていない。
 
 ##情報
