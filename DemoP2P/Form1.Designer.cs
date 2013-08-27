@@ -388,6 +388,9 @@
             // 
             // groupBoxLog
             // 
+            this.groupBoxLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxLog.Controls.Add(this.listViewLog);
             this.groupBoxLog.Controls.Add(this.buttonLoad);
             this.groupBoxLog.Controls.Add(this.checkBoxAutoScroll);
