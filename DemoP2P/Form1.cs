@@ -213,20 +213,18 @@ namespace DemoP2P
 
         private void OpenPeer()
         {
-            #region 入力ピア名の検証
+            #region 表示名の確認
 
-            if (string.IsNullOrWhiteSpace(Classifier))
+            string displayName = MyData.DisplayName.Trim();
+            if (string.IsNullOrWhiteSpace(displayName))
             {
-                MessageBox.Show(labelClassifier.Text + "を入力してください。", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                tabControl1.SelectedTab = tabPageSetting;
-                textBoxClassifier.SelectAll();
-                textBoxClassifier.Focus();
+                MessageBox.Show("DisplayNameを入力してください。", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                propertyGridMyData.Focus();
                 return;
             }
 
             #endregion
 
-            IPAddress[] hostAddresses = null;
             if (TargetGrobal)
             {
                 #region インデックスサーバー名の確認
@@ -240,50 +238,44 @@ namespace DemoP2P
                     return;
                 }
 
-                hostAddresses = Dns.GetHostAddresses(textBoxIndexServerAddress.Text);
-                if (hostAddresses == null || hostAddresses.Length == 0)
+                #endregion
+
+                try
                 {
-                    MessageBox.Show(labelIndexServerAddress.Text + "が正しくありません。", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    peerName = PeerName.CreateFromPeerHostName(textBoxIndexServerAddress.Text);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     tabControl1.SelectedTab = tabPageSetting;
                     textBoxIndexServerAddress.SelectAll();
                     textBoxIndexServerAddress.Focus();
                     return;
                 }
+            }
+            else
+            {
+                #region 入力ピア名の検証
+
+                if (string.IsNullOrWhiteSpace(Classifier))
+                {
+                    MessageBox.Show(labelClassifier.Text + "を入力してください。", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    tabControl1.SelectedTab = tabPageSetting;
+                    textBoxClassifier.SelectAll();
+                    textBoxClassifier.Focus();
+                    return;
+                }
 
                 #endregion
+
+                peerName = new PeerName(Classifier, PeerNameType);
             }
-
-            #region 表示名の確認
-
-            string displayName = MyData.DisplayName.Trim();
-            if (string.IsNullOrWhiteSpace(displayName))
-            {
-                MessageBox.Show("DisplayNameを入力してください。", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                propertyGridMyData.Focus();
-                return;
-            }
-
-            #endregion
-
-            peerName = new PeerName(Classifier, PeerNameType);
 
             peerNameRegistration = new PeerNameRegistration(peerName, PortNo)
             {
                 Cloud = Cloud,
                 Comment = myID
             };
-            if (TargetGrobal)
-            {
-                #region インデックスサーバーの設定
-
-                peerNameRegistration.UseAutoEndPointSelection = false;
-                foreach (var hostAddress in hostAddresses)
-                {
-                    peerNameRegistration.EndPointCollection.Add(new IPEndPoint(hostAddress, PortNo));
-                }
-
-                #endregion
-            }
             SetSendData();
 
             peerNameResolver = new PeerNameResolver();
@@ -354,22 +346,31 @@ namespace DemoP2P
 
         private void UpdateUI()
         {
-            textBoxClassifier.Enabled = !PeerOpened;
-            radioButtonSecured.Enabled = !PeerOpened;
-            radioButtonUnsecured.Enabled = !PeerOpened;
-            radioButtonGlobal.Enabled = !PeerOpened;
-            radioButtonAllLinkLocal.Enabled = !PeerOpened;
-            radioButtonAvailable.Enabled = !PeerOpened;
-
-            labelIndexServerAddress.Enabled = TargetGrobal && !PeerOpened;
-            textBoxIndexServerAddress.Enabled = TargetGrobal && !PeerOpened;
-
-            labelPortNo.Enabled = !PeerOpened;
-            numericUpDownPortNo.Enabled = !PeerOpened;
+            #region Input
 
             buttonStartOrUpdate.Text = PeerOpened ? "更新" : "開始";
             buttonClose.Enabled = PeerOpened;
+
+            #endregion
+
+            #region Setting
+
+            panelSetting.Enabled = !PeerOpened;
+
+            labelSecured.Enabled = !TargetGrobal;
+            panelSecured.Enabled = !TargetGrobal;
+            labelClassifier.Enabled = !TargetGrobal;
+            textBoxClassifier.Enabled = !TargetGrobal;
+            labelIndexServerAddress.Enabled = TargetGrobal;
+            textBoxIndexServerAddress.Enabled = TargetGrobal;
+
+            #endregion
+
+            #region Log
+
             buttonLoad.Enabled = PeerOpened;
+
+            #endregion
 
             labelInterval.Enabled = checkBoxAutoLoad.Checked;
             numericUpDownInterval.Enabled = checkBoxAutoLoad.Checked;

@@ -31,14 +31,14 @@
             this.components = new System.ComponentModel.Container();
             this.labelClassifier = new System.Windows.Forms.Label();
             this.textBoxClassifier = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.labelSecured = new System.Windows.Forms.Label();
             this.radioButtonSecured = new System.Windows.Forms.RadioButton();
             this.radioButtonUnsecured = new System.Windows.Forms.RadioButton();
             this.labelPortNo = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.panelSecured = new System.Windows.Forms.Panel();
             this.numericUpDownPortNo = new System.Windows.Forms.NumericUpDown();
-            this.label4 = new System.Windows.Forms.Label();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.labelNetwork = new System.Windows.Forms.Label();
+            this.panelNetwork = new System.Windows.Forms.Panel();
             this.radioButtonGlobal = new System.Windows.Forms.RadioButton();
             this.radioButtonAllLinkLocal = new System.Windows.Forms.RadioButton();
             this.radioButtonAvailable = new System.Windows.Forms.RadioButton();
@@ -65,9 +65,10 @@
             this.tabPageSetting = new System.Windows.Forms.TabPage();
             this.tabPageLog = new System.Windows.Forms.TabPage();
             this.checkBoxAutoScroll = new System.Windows.Forms.CheckBox();
-            this.panel1.SuspendLayout();
+            this.panelSetting = new System.Windows.Forms.Panel();
+            this.panelSecured.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPortNo)).BeginInit();
-            this.panel2.SuspendLayout();
+            this.panelNetwork.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInterval)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPageInput.SuspendLayout();
@@ -81,35 +82,36 @@
             this.splitContainer1.SuspendLayout();
             this.tabPageSetting.SuspendLayout();
             this.tabPageLog.SuspendLayout();
+            this.panelSetting.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelClassifier
             // 
             this.labelClassifier.AutoSize = true;
-            this.labelClassifier.Location = new System.Drawing.Point(7, 9);
+            this.labelClassifier.Location = new System.Drawing.Point(4, 36);
             this.labelClassifier.Name = "labelClassifier";
             this.labelClassifier.Size = new System.Drawing.Size(35, 12);
-            this.labelClassifier.TabIndex = 0;
+            this.labelClassifier.TabIndex = 2;
             this.labelClassifier.Text = "ピア名";
             // 
             // textBoxClassifier
             // 
             this.textBoxClassifier.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxClassifier.Location = new System.Drawing.Point(163, 6);
+            this.textBoxClassifier.Location = new System.Drawing.Point(160, 33);
             this.textBoxClassifier.Name = "textBoxClassifier";
             this.textBoxClassifier.Size = new System.Drawing.Size(264, 19);
-            this.textBoxClassifier.TabIndex = 1;
+            this.textBoxClassifier.TabIndex = 3;
             this.textBoxClassifier.Text = "testpeer";
             // 
-            // label2
+            // labelSecured
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 36);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(47, 12);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "ピア種類";
+            this.labelSecured.AutoSize = true;
+            this.labelSecured.Location = new System.Drawing.Point(4, 63);
+            this.labelSecured.Name = "labelSecured";
+            this.labelSecured.Size = new System.Drawing.Size(47, 12);
+            this.labelSecured.TabIndex = 4;
+            this.labelSecured.Text = "ピア種類";
             // 
             // radioButtonSecured
             // 
@@ -136,26 +138,26 @@
             // labelPortNo
             // 
             this.labelPortNo.AutoSize = true;
-            this.labelPortNo.Location = new System.Drawing.Point(7, 114);
+            this.labelPortNo.Location = new System.Drawing.Point(4, 113);
             this.labelPortNo.Name = "labelPortNo";
             this.labelPortNo.Size = new System.Drawing.Size(57, 12);
             this.labelPortNo.TabIndex = 8;
             this.labelPortNo.Text = "ポート番号";
             // 
-            // panel1
+            // panelSecured
             // 
-            this.panel1.AutoSize = true;
-            this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panel1.Controls.Add(this.radioButtonSecured);
-            this.panel1.Controls.Add(this.radioButtonUnsecured);
-            this.panel1.Location = new System.Drawing.Point(163, 31);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(250, 22);
-            this.panel1.TabIndex = 3;
+            this.panelSecured.AutoSize = true;
+            this.panelSecured.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panelSecured.Controls.Add(this.radioButtonSecured);
+            this.panelSecured.Controls.Add(this.radioButtonUnsecured);
+            this.panelSecured.Location = new System.Drawing.Point(160, 58);
+            this.panelSecured.Name = "panelSecured";
+            this.panelSecured.Size = new System.Drawing.Size(250, 22);
+            this.panelSecured.TabIndex = 5;
             // 
             // numericUpDownPortNo
             // 
-            this.numericUpDownPortNo.Location = new System.Drawing.Point(163, 112);
+            this.numericUpDownPortNo.Location = new System.Drawing.Point(160, 111);
             this.numericUpDownPortNo.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -171,26 +173,26 @@
             0,
             0});
             // 
-            // label4
+            // labelNetwork
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(7, 66);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(91, 12);
-            this.label4.TabIndex = 4;
-            this.label4.Text = "ネットワークの範囲";
+            this.labelNetwork.AutoSize = true;
+            this.labelNetwork.Location = new System.Drawing.Point(4, 12);
+            this.labelNetwork.Name = "labelNetwork";
+            this.labelNetwork.Size = new System.Drawing.Size(91, 12);
+            this.labelNetwork.TabIndex = 0;
+            this.labelNetwork.Text = "ネットワークの範囲";
             // 
-            // panel2
+            // panelNetwork
             // 
-            this.panel2.AutoSize = true;
-            this.panel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panel2.Controls.Add(this.radioButtonGlobal);
-            this.panel2.Controls.Add(this.radioButtonAllLinkLocal);
-            this.panel2.Controls.Add(this.radioButtonAvailable);
-            this.panel2.Location = new System.Drawing.Point(163, 59);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(197, 22);
-            this.panel2.TabIndex = 5;
+            this.panelNetwork.AutoSize = true;
+            this.panelNetwork.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panelNetwork.Controls.Add(this.radioButtonGlobal);
+            this.panelNetwork.Controls.Add(this.radioButtonAllLinkLocal);
+            this.panelNetwork.Controls.Add(this.radioButtonAvailable);
+            this.panelNetwork.Location = new System.Drawing.Point(160, 5);
+            this.panelNetwork.Name = "panelNetwork";
+            this.panelNetwork.Size = new System.Drawing.Size(197, 22);
+            this.panelNetwork.TabIndex = 1;
             // 
             // radioButtonGlobal
             // 
@@ -345,7 +347,7 @@
             // labelIndexServerAddress
             // 
             this.labelIndexServerAddress.AutoSize = true;
-            this.labelIndexServerAddress.Location = new System.Drawing.Point(7, 90);
+            this.labelIndexServerAddress.Location = new System.Drawing.Point(4, 89);
             this.labelIndexServerAddress.Name = "labelIndexServerAddress";
             this.labelIndexServerAddress.Size = new System.Drawing.Size(133, 12);
             this.labelIndexServerAddress.TabIndex = 6;
@@ -355,7 +357,7 @@
             // 
             this.textBoxIndexServerAddress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxIndexServerAddress.Location = new System.Drawing.Point(163, 87);
+            this.textBoxIndexServerAddress.Location = new System.Drawing.Point(160, 86);
             this.textBoxIndexServerAddress.Name = "textBoxIndexServerAddress";
             this.textBoxIndexServerAddress.Size = new System.Drawing.Size(264, 19);
             this.textBoxIndexServerAddress.TabIndex = 7;
@@ -471,16 +473,7 @@
             // 
             // tabPageSetting
             // 
-            this.tabPageSetting.Controls.Add(this.labelClassifier);
-            this.tabPageSetting.Controls.Add(this.textBoxIndexServerAddress);
-            this.tabPageSetting.Controls.Add(this.textBoxClassifier);
-            this.tabPageSetting.Controls.Add(this.labelIndexServerAddress);
-            this.tabPageSetting.Controls.Add(this.label2);
-            this.tabPageSetting.Controls.Add(this.labelPortNo);
-            this.tabPageSetting.Controls.Add(this.panel1);
-            this.tabPageSetting.Controls.Add(this.numericUpDownPortNo);
-            this.tabPageSetting.Controls.Add(this.label4);
-            this.tabPageSetting.Controls.Add(this.panel2);
+            this.tabPageSetting.Controls.Add(this.panelSetting);
             this.tabPageSetting.Location = new System.Drawing.Point(4, 22);
             this.tabPageSetting.Name = "tabPageSetting";
             this.tabPageSetting.Padding = new System.Windows.Forms.Padding(3);
@@ -513,6 +506,24 @@
             this.checkBoxAutoScroll.Text = "自動スクロール";
             this.checkBoxAutoScroll.UseVisualStyleBackColor = true;
             // 
+            // panelSetting
+            // 
+            this.panelSetting.Controls.Add(this.panelNetwork);
+            this.panelSetting.Controls.Add(this.labelClassifier);
+            this.panelSetting.Controls.Add(this.labelNetwork);
+            this.panelSetting.Controls.Add(this.textBoxIndexServerAddress);
+            this.panelSetting.Controls.Add(this.numericUpDownPortNo);
+            this.panelSetting.Controls.Add(this.textBoxClassifier);
+            this.panelSetting.Controls.Add(this.panelSecured);
+            this.panelSetting.Controls.Add(this.labelIndexServerAddress);
+            this.panelSetting.Controls.Add(this.labelPortNo);
+            this.panelSetting.Controls.Add(this.labelSecured);
+            this.panelSetting.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelSetting.Location = new System.Drawing.Point(3, 3);
+            this.panelSetting.Name = "panelSetting";
+            this.panelSetting.Size = new System.Drawing.Size(427, 419);
+            this.panelSetting.TabIndex = 10;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -528,11 +539,11 @@
             this.Text = "P2Pデモ";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.panelSecured.ResumeLayout(false);
+            this.panelSecured.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPortNo)).EndInit();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
+            this.panelNetwork.ResumeLayout(false);
+            this.panelNetwork.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInterval)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPageInput.ResumeLayout(false);
@@ -545,9 +556,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.tabPageSetting.ResumeLayout(false);
-            this.tabPageSetting.PerformLayout();
             this.tabPageLog.ResumeLayout(false);
             this.tabPageLog.PerformLayout();
+            this.panelSetting.ResumeLayout(false);
+            this.panelSetting.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -557,14 +569,14 @@
 
         private System.Windows.Forms.Label labelClassifier;
         private System.Windows.Forms.TextBox textBoxClassifier;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label labelSecured;
         private System.Windows.Forms.RadioButton radioButtonSecured;
         private System.Windows.Forms.RadioButton radioButtonUnsecured;
         private System.Windows.Forms.Label labelPortNo;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panelSecured;
         private System.Windows.Forms.NumericUpDown numericUpDownPortNo;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Label labelNetwork;
+        private System.Windows.Forms.Panel panelNetwork;
         private System.Windows.Forms.RadioButton radioButtonGlobal;
         private System.Windows.Forms.RadioButton radioButtonAllLinkLocal;
         private System.Windows.Forms.RadioButton radioButtonAvailable;
@@ -591,6 +603,7 @@
         private System.Windows.Forms.ListView listViewOtherUser;
         private System.Windows.Forms.ColumnHeader columnHeaderDisplayName;
         private System.Windows.Forms.PropertyGrid propertyGridOtherData;
+        private System.Windows.Forms.Panel panelSetting;
     }
 }
 
