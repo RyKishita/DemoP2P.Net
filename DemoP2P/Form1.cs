@@ -88,6 +88,11 @@ namespace DemoP2P
             }
         }
 
+        bool TargetGrobal
+        {
+            get { return radioButtonGlobal.Checked || radioButtonAvailable.Checked; }
+        }
+
         #endregion
 
         private void UpdateUI()
@@ -99,9 +104,8 @@ namespace DemoP2P
             radioButtonAllLinkLocal.Enabled = !PeerOpened;
             radioButtonAvailable.Enabled = !PeerOpened;
 
-            bool bSelectGrobal = radioButtonGlobal.Checked || radioButtonAvailable.Checked;
-            labelIndexServerAddress.Enabled = bSelectGrobal && !PeerOpened;
-            textBoxIndexServerAddress.Enabled = bSelectGrobal && !PeerOpened;
+            labelIndexServerAddress.Enabled = TargetGrobal && !PeerOpened;
+            textBoxIndexServerAddress.Enabled = TargetGrobal && !PeerOpened;
 
             labelPortNo.Enabled = !PeerOpened;
             numericUpDownPortNo.Enabled = !PeerOpened;
@@ -159,16 +163,20 @@ namespace DemoP2P
 
                 #endregion
 
-                peerName = new PeerName(Classifier, PeerNameType);
-
-                peerNameRegistration = new PeerNameRegistration(peerName, PortNo) { Cloud = Cloud };
-                if (radioButtonGlobal.Checked || radioButtonAvailable.Checked)
+                IPAddress[] hostAddresses = null;
+                if (TargetGrobal)
                 {
-                    #region インデックスサーバーの指定
+                    #region インデックスサーバー名の確認
 
-                    peerNameRegistration.UseAutoEndPointSelection = false;
+                    if (string.IsNullOrWhiteSpace(textBoxIndexServerAddress.Text))
+                    {
+                        MessageBox.Show(labelIndexServerAddress.Text + "を入力してください。", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        textBoxIndexServerAddress.SelectAll();
+                        textBoxIndexServerAddress.Focus();
+                        return;
+                    }
 
-                    var hostAddresses = Dns.GetHostAddresses(textBoxIndexServerAddress.Text);
+                    hostAddresses = Dns.GetHostAddresses(textBoxIndexServerAddress.Text);
                     if (hostAddresses == null || hostAddresses.Length == 0)
                     {
                         MessageBox.Show(labelIndexServerAddress.Text + "が正しくありません。", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -176,6 +184,17 @@ namespace DemoP2P
                         textBoxIndexServerAddress.Focus();
                         return;
                     }
+
+                    #endregion
+                }
+
+                peerName = new PeerName(Classifier, PeerNameType);
+                peerNameRegistration = new PeerNameRegistration(peerName, PortNo) { Cloud = Cloud };
+                if (TargetGrobal)
+                {
+                    #region インデックスサーバーの設定
+
+                    peerNameRegistration.UseAutoEndPointSelection = false;
                     foreach (var hostAddress in hostAddresses)
                     {
                         peerNameRegistration.EndPointCollection.Add(new IPEndPoint(hostAddress, PortNo));
