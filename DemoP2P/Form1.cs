@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.PeerToPeer;
+using System.Net;
 
 namespace DemoP2P
 {
@@ -89,25 +90,21 @@ namespace DemoP2P
 
         #endregion
 
-        private void SetupPeer()
-        {
-            peerName = new PeerName(Classifier, PeerNameType);
-            peerNameRegistration = new PeerNameRegistration(peerName, PortNo) { Cloud = Cloud };
-            SetSendData();
-            peerNameResolver = new PeerNameResolver();
-            peerNameResolver.ResolveProgressChanged += peerNameResolver_ResolveProgressChanged;
-            peerNameResolver.ResolveCompleted += peerNameResolver_ResolveCompleted;
-        }
-
         private void UpdateUI()
         {
             textBoxClassifier.Enabled = !PeerOpened;
             radioButtonSecured.Enabled = !PeerOpened;
             radioButtonUnsecured.Enabled = !PeerOpened;
-            numericUpDownPortNo.Enabled = !PeerOpened;
-            radioButtonAvailable.Enabled = !PeerOpened;
-            radioButtonAllLinkLocal.Enabled = !PeerOpened;
             radioButtonGlobal.Enabled = !PeerOpened;
+            radioButtonAllLinkLocal.Enabled = !PeerOpened;
+            radioButtonAvailable.Enabled = !PeerOpened;
+
+            bool bSelectGrobal = radioButtonGlobal.Checked || radioButtonAvailable.Checked;
+            labelIndexServerAddress.Enabled = bSelectGrobal && !PeerOpened;
+            textBoxIndexServerAddress.Enabled = bSelectGrobal && !PeerOpened;
+
+            labelPortNo.Enabled = !PeerOpened;
+            numericUpDownPortNo.Enabled = !PeerOpened;
 
             buttonStartOrUpdate.Text = PeerOpened ? "更新" : "開始";
             buttonClose.Enabled = PeerOpened;
@@ -162,7 +159,36 @@ namespace DemoP2P
 
                 #endregion
 
-                SetupPeer();
+                peerName = new PeerName(Classifier, PeerNameType);
+
+                peerNameRegistration = new PeerNameRegistration(peerName, PortNo) { Cloud = Cloud };
+                if (radioButtonGlobal.Checked || radioButtonAvailable.Checked)
+                {
+                    #region インデックスサーバーの指定
+
+                    peerNameRegistration.UseAutoEndPointSelection = false;
+
+                    var hostAddresses = Dns.GetHostAddresses(textBoxIndexServerAddress.Text);
+                    if (hostAddresses == null || hostAddresses.Length == 0)
+                    {
+                        MessageBox.Show(labelIndexServerAddress.Text + "が正しくありません。", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        textBoxIndexServerAddress.SelectAll();
+                        textBoxIndexServerAddress.Focus();
+                        return;
+                    }
+                    foreach (var hostAddress in hostAddresses)
+                    {
+                        peerNameRegistration.EndPointCollection.Add(new IPEndPoint(hostAddress, PortNo));
+                    }
+
+                    #endregion
+                }
+                SetSendData();
+
+                peerNameResolver = new PeerNameResolver();
+                peerNameResolver.ResolveProgressChanged += peerNameResolver_ResolveProgressChanged;
+                peerNameResolver.ResolveCompleted += peerNameResolver_ResolveCompleted;
+
                 UpdateUI();
 
                 peerNameRegistration.Start();
@@ -311,6 +337,11 @@ namespace DemoP2P
         #endregion
 
         private void Form1_Load(object sender, EventArgs e)
+        {
+            UpdateUI();
+        }
+
+        private void radioButtonNetwork_CheckedChanged(object sender, EventArgs e)
         {
             UpdateUI();
         }
