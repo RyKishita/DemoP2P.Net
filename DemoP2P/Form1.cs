@@ -80,9 +80,9 @@ namespace DemoP2P
         {
             get
             {
-                if (radioButtonAvailable.Checked) return Cloud.Available;
-                if (radioButtonAllLinkLocal.Checked) return Cloud.AllLinkLocal;
                 if (radioButtonGlobal.Checked) return Cloud.Global;
+                if (radioButtonAllLinkLocal.Checked) return Cloud.AllLinkLocal;
+                if (radioButtonAvailable.Checked) return Cloud.Available;
                 throw new NotImplementedException();
             }
         }

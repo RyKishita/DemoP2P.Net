@@ -172,17 +172,17 @@
             this.panel2.Controls.Add(this.radioButtonAvailable);
             this.panel2.Location = new System.Drawing.Point(122, 112);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(184, 66);
+            this.panel2.Size = new System.Drawing.Size(77, 66);
             this.panel2.TabIndex = 7;
             // 
             // radioButtonGlobal
             // 
             this.radioButtonGlobal.AutoSize = true;
             this.radioButtonGlobal.Checked = true;
-            this.radioButtonGlobal.Location = new System.Drawing.Point(3, 47);
+            this.radioButtonGlobal.Location = new System.Drawing.Point(3, 25);
             this.radioButtonGlobal.Name = "radioButtonGlobal";
             this.radioButtonGlobal.Size = new System.Drawing.Size(61, 16);
-            this.radioButtonGlobal.TabIndex = 2;
+            this.radioButtonGlobal.TabIndex = 1;
             this.radioButtonGlobal.TabStop = true;
             this.radioButtonGlobal.Text = "ローカル";
             this.radioButtonGlobal.UseVisualStyleBackColor = true;
@@ -190,21 +190,21 @@
             // radioButtonAllLinkLocal
             // 
             this.radioButtonAllLinkLocal.AutoSize = true;
-            this.radioButtonAllLinkLocal.Location = new System.Drawing.Point(3, 25);
+            this.radioButtonAllLinkLocal.Location = new System.Drawing.Point(3, 3);
             this.radioButtonAllLinkLocal.Name = "radioButtonAllLinkLocal";
-            this.radioButtonAllLinkLocal.Size = new System.Drawing.Size(84, 16);
-            this.radioButtonAllLinkLocal.TabIndex = 1;
-            this.radioButtonAllLinkLocal.Text = "インターネット";
+            this.radioButtonAllLinkLocal.Size = new System.Drawing.Size(71, 16);
+            this.radioButtonAllLinkLocal.TabIndex = 0;
+            this.radioButtonAllLinkLocal.Text = "グローバル";
             this.radioButtonAllLinkLocal.UseVisualStyleBackColor = true;
             // 
             // radioButtonAvailable
             // 
             this.radioButtonAvailable.AutoSize = true;
-            this.radioButtonAvailable.Location = new System.Drawing.Point(3, 3);
+            this.radioButtonAvailable.Location = new System.Drawing.Point(3, 47);
             this.radioButtonAvailable.Name = "radioButtonAvailable";
-            this.radioButtonAvailable.Size = new System.Drawing.Size(178, 16);
-            this.radioButtonAvailable.TabIndex = 0;
-            this.radioButtonAvailable.Text = "現在使用可能なネットワーク全て";
+            this.radioButtonAvailable.Size = new System.Drawing.Size(47, 16);
+            this.radioButtonAvailable.TabIndex = 2;
+            this.radioButtonAvailable.Text = "両方";
             this.radioButtonAvailable.UseVisualStyleBackColor = true;
             // 
             // label5
