@@ -293,7 +293,7 @@ namespace DemoP2P
             {
                 #region addLog
 
-                if (checkBoxShowSystemLog.Checked && logType == LogType.System) return;
+                if (!checkBoxShowSystemLog.Checked && logType == LogType.System) return;
 
                 lock (listViewLog)
                 {
