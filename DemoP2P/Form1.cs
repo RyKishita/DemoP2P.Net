@@ -156,6 +156,7 @@ namespace DemoP2P
                 if (string.IsNullOrWhiteSpace(Classifier))
                 {
                     MessageBox.Show(labelClassifier.Text + "を入力してください。", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    tabControl1.SelectedTab = tabPageSetting;
                     textBoxClassifier.SelectAll();
                     textBoxClassifier.Focus();
                     return;
@@ -171,6 +172,7 @@ namespace DemoP2P
                     if (string.IsNullOrWhiteSpace(textBoxIndexServerAddress.Text))
                     {
                         MessageBox.Show(labelIndexServerAddress.Text + "を入力してください。", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        tabControl1.SelectedTab = tabPageSetting;
                         textBoxIndexServerAddress.SelectAll();
                         textBoxIndexServerAddress.Focus();
                         return;
@@ -180,6 +182,7 @@ namespace DemoP2P
                     if (hostAddresses == null || hostAddresses.Length == 0)
                     {
                         MessageBox.Show(labelIndexServerAddress.Text + "が正しくありません。", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        tabControl1.SelectedTab = tabPageSetting;
                         textBoxIndexServerAddress.SelectAll();
                         textBoxIndexServerAddress.Focus();
                         return;
@@ -312,8 +315,6 @@ namespace DemoP2P
             {
                 #region addLog
 
-                if (!checkBoxShowSystemLog.Checked && logType == LogType.System) return;
-
                 lock (listViewLog)
                 {
                     listViewLog.BeginUpdate();
@@ -327,11 +328,11 @@ namespace DemoP2P
                             case LogType.Received: item.ForeColor = Color.Blue; break;
                             default: throw new NotImplementedException();
                         }
-
                         if (checkBoxAutoScroll.Checked)
                         {
                             item.EnsureVisible();
                         }
+
                         listViewLog.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
                     }
                     finally
