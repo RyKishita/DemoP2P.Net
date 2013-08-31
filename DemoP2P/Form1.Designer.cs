@@ -42,10 +42,6 @@
             this.radioButtonGlobal = new System.Windows.Forms.RadioButton();
             this.radioButtonAllLinkLocal = new System.Windows.Forms.RadioButton();
             this.radioButtonAvailable = new System.Windows.Forms.RadioButton();
-            this.label5 = new System.Windows.Forms.Label();
-            this.textBoxComment = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.textBoxData = new System.Windows.Forms.TextBox();
             this.buttonStartOrUpdate = new System.Windows.Forms.Button();
             this.buttonClose = new System.Windows.Forms.Button();
             this.listViewLog = new System.Windows.Forms.ListView();
@@ -60,6 +56,12 @@
             this.textBoxIndexServerAddress = new System.Windows.Forms.TextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageInput = new System.Windows.Forms.TabPage();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.propertyGridMyData = new System.Windows.Forms.PropertyGrid();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.listViewOtherUser = new System.Windows.Forms.ListView();
+            this.columnHeaderDisplayName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.propertyGridOtherData = new System.Windows.Forms.PropertyGrid();
             this.tabPageSetting = new System.Windows.Forms.TabPage();
             this.tabPageLog = new System.Windows.Forms.TabPage();
             this.checkBoxAutoScroll = new System.Windows.Forms.CheckBox();
@@ -69,6 +71,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInterval)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPageInput.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.tabPageSetting.SuspendLayout();
             this.tabPageLog.SuspendLayout();
             this.SuspendLayout();
@@ -217,46 +227,10 @@
             this.radioButtonAvailable.UseVisualStyleBackColor = true;
             this.radioButtonAvailable.CheckedChanged += new System.EventHandler(this.radioButtonNetwork_CheckedChanged);
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(38, 36);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(38, 12);
-            this.label5.TabIndex = 0;
-            this.label5.Text = "コメント";
-            // 
-            // textBoxComment
-            // 
-            this.textBoxComment.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxComment.Location = new System.Drawing.Point(112, 33);
-            this.textBoxComment.MaxLength = 38;
-            this.textBoxComment.Name = "textBoxComment";
-            this.textBoxComment.Size = new System.Drawing.Size(137, 19);
-            this.textBoxComment.TabIndex = 1;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(38, 61);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(33, 12);
-            this.label6.TabIndex = 2;
-            this.label6.Text = "データ";
-            // 
-            // textBoxData
-            // 
-            this.textBoxData.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxData.Location = new System.Drawing.Point(112, 58);
-            this.textBoxData.Name = "textBoxData";
-            this.textBoxData.Size = new System.Drawing.Size(137, 19);
-            this.textBoxData.TabIndex = 3;
-            // 
             // buttonStartOrUpdate
             // 
-            this.buttonStartOrUpdate.Location = new System.Drawing.Point(112, 83);
+            this.buttonStartOrUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonStartOrUpdate.Location = new System.Drawing.Point(3, 133);
             this.buttonStartOrUpdate.Name = "buttonStartOrUpdate";
             this.buttonStartOrUpdate.Size = new System.Drawing.Size(75, 23);
             this.buttonStartOrUpdate.TabIndex = 4;
@@ -266,7 +240,8 @@
             // 
             // buttonClose
             // 
-            this.buttonClose.Location = new System.Drawing.Point(193, 83);
+            this.buttonClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonClose.Location = new System.Drawing.Point(84, 133);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(75, 23);
             this.buttonClose.TabIndex = 5;
@@ -401,12 +376,7 @@
             // 
             // tabPageInput
             // 
-            this.tabPageInput.Controls.Add(this.textBoxComment);
-            this.tabPageInput.Controls.Add(this.buttonClose);
-            this.tabPageInput.Controls.Add(this.label5);
-            this.tabPageInput.Controls.Add(this.buttonStartOrUpdate);
-            this.tabPageInput.Controls.Add(this.label6);
-            this.tabPageInput.Controls.Add(this.textBoxData);
+            this.tabPageInput.Controls.Add(this.splitContainer2);
             this.tabPageInput.Location = new System.Drawing.Point(4, 22);
             this.tabPageInput.Name = "tabPageInput";
             this.tabPageInput.Padding = new System.Windows.Forms.Padding(3);
@@ -414,6 +384,90 @@
             this.tabPageInput.TabIndex = 0;
             this.tabPageInput.Text = "入力";
             this.tabPageInput.UseVisualStyleBackColor = true;
+            // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.propertyGridMyData);
+            this.splitContainer2.Panel1.Controls.Add(this.buttonClose);
+            this.splitContainer2.Panel1.Controls.Add(this.buttonStartOrUpdate);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.splitContainer1);
+            this.splitContainer2.Size = new System.Drawing.Size(427, 419);
+            this.splitContainer2.SplitterDistance = 159;
+            this.splitContainer2.TabIndex = 9;
+            // 
+            // propertyGridMyData
+            // 
+            this.propertyGridMyData.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.propertyGridMyData.HelpVisible = false;
+            this.propertyGridMyData.Location = new System.Drawing.Point(3, 3);
+            this.propertyGridMyData.Name = "propertyGridMyData";
+            this.propertyGridMyData.PropertySort = System.Windows.Forms.PropertySort.NoSort;
+            this.propertyGridMyData.Size = new System.Drawing.Size(421, 124);
+            this.propertyGridMyData.TabIndex = 6;
+            this.propertyGridMyData.ToolbarVisible = false;
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.listViewOtherUser);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.propertyGridOtherData);
+            this.splitContainer1.Size = new System.Drawing.Size(427, 256);
+            this.splitContainer1.SplitterDistance = 142;
+            this.splitContainer1.TabIndex = 8;
+            // 
+            // listViewOtherUser
+            // 
+            this.listViewOtherUser.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.listViewOtherUser.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeaderDisplayName});
+            this.listViewOtherUser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewOtherUser.FullRowSelect = true;
+            this.listViewOtherUser.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listViewOtherUser.HideSelection = false;
+            this.listViewOtherUser.Location = new System.Drawing.Point(0, 0);
+            this.listViewOtherUser.MultiSelect = false;
+            this.listViewOtherUser.Name = "listViewOtherUser";
+            this.listViewOtherUser.Size = new System.Drawing.Size(142, 256);
+            this.listViewOtherUser.TabIndex = 7;
+            this.listViewOtherUser.UseCompatibleStateImageBehavior = false;
+            this.listViewOtherUser.View = System.Windows.Forms.View.Details;
+            this.listViewOtherUser.SelectedIndexChanged += new System.EventHandler(this.listViewOtherUser_SelectedIndexChanged);
+            // 
+            // columnHeaderDisplayName
+            // 
+            this.columnHeaderDisplayName.Text = "DisplayName";
+            this.columnHeaderDisplayName.Width = 118;
+            // 
+            // propertyGridOtherData
+            // 
+            this.propertyGridOtherData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.propertyGridOtherData.HelpVisible = false;
+            this.propertyGridOtherData.Location = new System.Drawing.Point(0, 0);
+            this.propertyGridOtherData.Name = "propertyGridOtherData";
+            this.propertyGridOtherData.PropertySort = System.Windows.Forms.PropertySort.NoSort;
+            this.propertyGridOtherData.Size = new System.Drawing.Size(281, 256);
+            this.propertyGridOtherData.TabIndex = 7;
+            this.propertyGridOtherData.ToolbarVisible = false;
             // 
             // tabPageSetting
             // 
@@ -480,7 +534,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInterval)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPageInput.ResumeLayout(false);
-            this.tabPageInput.PerformLayout();
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.tabPageSetting.ResumeLayout(false);
             this.tabPageSetting.PerformLayout();
             this.tabPageLog.ResumeLayout(false);
@@ -505,10 +566,6 @@
         private System.Windows.Forms.RadioButton radioButtonGlobal;
         private System.Windows.Forms.RadioButton radioButtonAllLinkLocal;
         private System.Windows.Forms.RadioButton radioButtonAvailable;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBoxComment;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textBoxData;
         private System.Windows.Forms.Button buttonStartOrUpdate;
         private System.Windows.Forms.Button buttonClose;
         private System.Windows.Forms.ListView listViewLog;
@@ -526,6 +583,12 @@
         private System.Windows.Forms.TabPage tabPageSetting;
         private System.Windows.Forms.TabPage tabPageLog;
         private System.Windows.Forms.CheckBox checkBoxAutoScroll;
+        private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.PropertyGrid propertyGridMyData;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.ListView listViewOtherUser;
+        private System.Windows.Forms.ColumnHeader columnHeaderDisplayName;
+        private System.Windows.Forms.PropertyGrid propertyGridOtherData;
     }
 }
 
