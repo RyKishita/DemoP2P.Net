@@ -23,7 +23,7 @@ namespace DemoP2P
 
         PeerName peerName = null;
         PeerNameRegistration peerNameRegistration = null;
-        PeerNameResolver peerNameResolver = null;
+        Resolver<UserData> resolver = null;
         volatile bool bLoading = false;
         readonly string myID = Guid.NewGuid().ToString();
 
@@ -159,7 +159,7 @@ namespace DemoP2P
         {
             if (bLoading) return;
             bLoading = true;
-            peerNameResolver.ResolveAsync(peerName, "Load");
+            resolver.ResolveAsync();
         }
 
         private void checkBoxAutoLoad_CheckedChanged(object sender, EventArgs e)
@@ -183,10 +183,34 @@ namespace DemoP2P
 
         #region ピアイベント
 
-        void peerNameResolver_ResolveCompleted(object sender, ResolveCompletedEventArgs e)
+        void resolver_AddItem(string id)
         {
-            string messsage = string.Format("ResolveCompleted UserState:{0}", e.UserState);
-            if (e.Cancelled)
+            SetOtherUser(id);
+            AddLog("resolver_AddItem", LogType.System);
+        }
+
+        void resolver_UpdatedItem(string id)
+        {
+            SetOtherUser(id);
+            AddLog("resolver_UpdatedItem", LogType.System);
+        }
+
+        void resolver_DeletedItem(string id)
+        {
+            DeleteOtherUser(id);
+            AddLog("resolver_DeletedItem", LogType.System);
+        }
+
+        void resolver_ProgressChanged(string userState, int progressPercentage)
+        {
+            string messsage = string.Format("ResolveProgressChanged UserState:{0} ProgressPercentage:{1}", userState, progressPercentage);
+            AddLog(messsage, LogType.System);
+        }
+
+        void resolver_Completed(string userState, bool cancelled)
+        {
+            string messsage = string.Format("ResolveCompleted UserState:{0}", userState);
+            if (cancelled)
             {
                 messsage = "[Cancelled]" + messsage;
             }
@@ -194,15 +218,6 @@ namespace DemoP2P
 
             RestartTimer();
             bLoading = false;
-        }
-
-        void peerNameResolver_ResolveProgressChanged(object sender, ResolveProgressChangedEventArgs e)
-        {
-            string messsage = string.Format("ResolveProgressChanged UserState:{0} ProgressPercentage:{1}", e.UserState, e.ProgressPercentage);
-            AddLog(messsage, LogType.System);
-
-            AddLog(e.PeerNameRecord);
-            SetOtherUser(e.PeerNameRecord);
         }
 
         #endregion
@@ -278,9 +293,12 @@ namespace DemoP2P
             };
             SetSendData();
 
-            peerNameResolver = new PeerNameResolver();
-            peerNameResolver.ResolveProgressChanged += peerNameResolver_ResolveProgressChanged;
-            peerNameResolver.ResolveCompleted += peerNameResolver_ResolveCompleted;
+            resolver = new Resolver<UserData>(peerName);
+            resolver.AddItem += resolver_AddItem;
+            resolver.UpdatedItem += resolver_UpdatedItem;
+            resolver.DeletedItem += resolver_DeletedItem;
+            resolver.ProgressChanged += resolver_ProgressChanged;
+            resolver.Completed += resolver_Completed;
 
             UpdateUI();
 
@@ -299,12 +317,11 @@ namespace DemoP2P
             AddLog("UpdateSend", LogType.System);
         }
 
-        private void SetOtherUser(PeerNameRecord peerNameRecord)
+        private void SetOtherUser(string id)
         {
             Action action = () =>
                 {
-                    string id = peerNameRecord.Comment;
-                    var userData = Serializer.Deserialize<UserData>(peerNameRecord.Data);
+                    UserData userData = resolver.GetItem(id);
 
                     lock (listViewOtherUser)
                     {
@@ -331,6 +348,31 @@ namespace DemoP2P
                         finally
                         {
                             listViewOtherUser.EndUpdate();
+                        }
+                    }
+                };
+            if (InvokeRequired)
+            {
+                Invoke(new MethodInvoker(action));
+            }
+            else
+            {
+                action();
+            }
+        }
+
+        private void DeleteOtherUser(string id)
+        {
+            Action action = () =>
+                {
+                    UserData userData = resolver.GetItem(id);
+
+                    lock (listViewOtherUser)
+                    {
+                        var items = listViewOtherUser.Items.Find(id, false);
+                        if (items.Length == 1)
+                        {
+                            listViewOtherUser.Items.Remove(items[0]);
                         }
                     }
                 };
@@ -389,9 +431,12 @@ namespace DemoP2P
 
             timerLoad.Stop();
 
-            peerNameResolver.ResolveProgressChanged -= peerNameResolver_ResolveProgressChanged;
-            peerNameResolver.ResolveCompleted -= peerNameResolver_ResolveCompleted;
-            peerNameResolver = null;
+            resolver.AddItem -= resolver_AddItem;
+            resolver.UpdatedItem -= resolver_UpdatedItem;
+            resolver.DeletedItem -= resolver_DeletedItem;
+            resolver.ProgressChanged -= resolver_ProgressChanged;
+            resolver.Completed -= resolver_Completed;
+            resolver = null;
 
             peerNameRegistration.Stop();
             peerNameRegistration = null;

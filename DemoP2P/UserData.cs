@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace DemoP2P
 {
     [Serializable]
-    class UserData
+    class UserData : IEquatable<UserData>
     {
         public string DisplayName { get; set; }
         public bool Flag1 { get; set; }
@@ -21,6 +21,21 @@ namespace DemoP2P
         public override int GetHashCode()
         {
             return ToString().GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as UserData);
+        }
+
+        public bool Equals(UserData other)
+        {
+            if (other == null) return false;
+            if (object.ReferenceEquals(this, other)) return true;
+
+            return this.DisplayName == other.DisplayName &&
+                    this.Flag1 == other.Flag1 &&
+                    this.Flag2 == other.Flag2;
         }
     }
 }
