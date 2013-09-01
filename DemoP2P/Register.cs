@@ -16,7 +16,6 @@ namespace DemoP2P
                 Cloud = cloud,
                 Comment = userID
             };
-            peerNameRegistration.Start();
         }
 
         PeerNameRegistration peerNameRegistration;
@@ -24,10 +23,18 @@ namespace DemoP2P
 
         public void SetData(T data)
         {
+            if (data == null) throw new ArgumentNullException("data");
             if (oldData != null && oldData.Equals(data)) return;
 
             peerNameRegistration.Data = Serializer.Serialize(data);
-            peerNameRegistration.Update();
+            if (peerNameRegistration.IsRegistered())
+            {
+                peerNameRegistration.Update();
+            }
+            else
+            {
+                peerNameRegistration.Start();
+            }
 
             oldData = data.Clone() as T;
         }
