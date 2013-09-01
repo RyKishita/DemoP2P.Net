@@ -7,8 +7,20 @@ using System.Threading.Tasks;
 namespace DemoP2P
 {
     [Serializable]
-    class UserData : IEquatable<UserData>
+    class UserData : IEquatable<UserData>, ICloneable
     {
+        public UserData()
+        {
+
+        }
+
+        public UserData(UserData src)
+        {
+            this.DisplayName = src.DisplayName;
+            this.Flag1 = src.Flag1;
+            this.Flag2 = src.Flag2;
+        }
+
         public string DisplayName { get; set; }
         public bool Flag1 { get; set; }
         public bool Flag2 { get; set; }
@@ -36,6 +48,11 @@ namespace DemoP2P
             return this.DisplayName == other.DisplayName &&
                     this.Flag1 == other.Flag1 &&
                     this.Flag2 == other.Flag2;
+        }
+
+        public object Clone()
+        {
+            return new UserData(this);
         }
     }
 }

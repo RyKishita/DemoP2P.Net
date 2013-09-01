@@ -93,7 +93,7 @@ namespace DemoP2P
             CheckDeleted(e.PeerNameRecordCollection);
         }
 
-        static string GetID(PeerNameRecord peerNameRecord)
+        static string GetUserID(PeerNameRecord peerNameRecord)
         {
             return peerNameRecord.Comment;
         }
@@ -105,7 +105,7 @@ namespace DemoP2P
 
         void ReadRecord(PeerNameRecord peerNameRecord)
         {
-            string id = GetID(peerNameRecord);
+            string id = GetUserID(peerNameRecord);
             var loadData = GetData(peerNameRecord);
 
             var existItem = GetItem(id);
@@ -122,7 +122,7 @@ namespace DemoP2P
 
         private void CheckDeleted(PeerNameRecordCollection peerNameRecords)
         {
-            var existIDs = peerNameRecords.Select(pnr => GetID(pnr)).ToList();
+            var existIDs = peerNameRecords.Select(pnr => GetUserID(pnr)).ToList();
             var deletedIDs = GetIDs().Where(id => !existIDs.Contains(id));
             foreach (string id in deletedIDs)
             {

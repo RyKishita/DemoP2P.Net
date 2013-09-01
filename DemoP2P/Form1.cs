@@ -22,7 +22,7 @@ namespace DemoP2P
         #region フィールド
 
         PeerName peerName = null;
-        PeerNameRegistration peerNameRegistration = null;
+        Register<UserData> register = null;
         Resolver<UserData> resolver = null;
         volatile bool bLoading = false;
         readonly string myID = Guid.NewGuid().ToString();
@@ -35,7 +35,7 @@ namespace DemoP2P
         {
             get
             {
-                return peerNameRegistration != null;
+                return register != null;
             }
         }
 
@@ -286,18 +286,12 @@ namespace DemoP2P
                 peerName = new PeerName(Classifier, PeerNameType);
             }
 
-            peerNameRegistration = new PeerNameRegistration(peerName, PortNo)
-            {
-                Cloud = Cloud,
-                Comment = myID
-            };
-            SetSendData();
-
             MakeResolver();
 
-            UpdateUI();
+            register = new Register<UserData>(Cloud, peerName, PortNo, myID);
+            register.SetData(MyData);
 
-            peerNameRegistration.Start();
+            UpdateUI();
 
             AddLog("StartPeer", LogType.System);
 
@@ -306,8 +300,7 @@ namespace DemoP2P
 
         private void UpdateMyData()
         {
-            SetSendData();
-            peerNameRegistration.Update();
+            register.SetData(MyData);
 
             AddLog("UpdateSend", LogType.System);
         }
@@ -414,12 +407,6 @@ namespace DemoP2P
             labelIntervalUnit.Enabled = checkBoxAutoLoad.Checked;
         }
 
-        private void SetSendData()
-        {
-            peerNameRegistration.Data = Serializer.Serialize(MyData);
-            AddLog(peerNameRegistration.Comment, MyData, LogType.Send);
-        }
-
         private void ClosePeer()
         {
             if (!PeerOpened) return;
@@ -428,8 +415,8 @@ namespace DemoP2P
 
             DestroyResolver();
 
-            peerNameRegistration.Stop();
-            peerNameRegistration = null;
+            register.Dispose();
+            register = null;
         }
 
         private void RestartTimer()
