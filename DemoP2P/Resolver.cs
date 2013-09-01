@@ -159,6 +159,9 @@ namespace DemoP2P
 
         public void Dispose()
         {
+            peerNameResolver.ResolveProgressChanged -= pnr_ResolveProgressChanged;
+            peerNameResolver.ResolveCompleted -= pnr_ResolveCompleted;
+            peerNameResolver = null;
             peerName = null;
         }
     }
