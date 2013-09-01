@@ -293,12 +293,7 @@ namespace DemoP2P
             };
             SetSendData();
 
-            resolver = new Resolver<UserData>(peerName);
-            resolver.AddItem += resolver_AddItem;
-            resolver.UpdatedItem += resolver_UpdatedItem;
-            resolver.DeletedItem += resolver_DeletedItem;
-            resolver.ProgressChanged += resolver_ProgressChanged;
-            resolver.Completed += resolver_Completed;
+            MakeResolver();
 
             UpdateUI();
 
@@ -431,12 +426,7 @@ namespace DemoP2P
 
             timerLoad.Stop();
 
-            resolver.AddItem -= resolver_AddItem;
-            resolver.UpdatedItem -= resolver_UpdatedItem;
-            resolver.DeletedItem -= resolver_DeletedItem;
-            resolver.ProgressChanged -= resolver_ProgressChanged;
-            resolver.Completed -= resolver_Completed;
-            resolver = null;
+            DestroyResolver();
 
             peerNameRegistration.Stop();
             peerNameRegistration = null;
@@ -460,6 +450,27 @@ namespace DemoP2P
             {
                 action();
             }
+        }
+
+        private void MakeResolver()
+        {
+            resolver = new Resolver<UserData>(peerName);
+            resolver.AddItem += resolver_AddItem;
+            resolver.UpdatedItem += resolver_UpdatedItem;
+            resolver.DeletedItem += resolver_DeletedItem;
+            resolver.ProgressChanged += resolver_ProgressChanged;
+            resolver.Completed += resolver_Completed;
+        }
+
+        private void DestroyResolver()
+        {
+            resolver.AddItem -= resolver_AddItem;
+            resolver.UpdatedItem -= resolver_UpdatedItem;
+            resolver.DeletedItem -= resolver_DeletedItem;
+            resolver.ProgressChanged -= resolver_ProgressChanged;
+            resolver.Completed -= resolver_Completed;
+            resolver.Dispose();
+            resolver = null;
         }
 
         #region AddLog

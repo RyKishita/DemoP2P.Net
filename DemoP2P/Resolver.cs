@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DemoP2P
 {
-    class Resolver<T> where T : class, IEquatable<T>
+    class Resolver<T> : IDisposable where T : class, IEquatable<T>
     {
         public Resolver(PeerName peerName)
         {
@@ -111,20 +111,12 @@ namespace DemoP2P
             var existItem = GetItem(id);
             if (existItem == null)
             {
-                lock (items)
-                {
-                    items.Add(id, loadData);
-                }
-                if (AddItem != null) AddItem(id);
+                ExecuteAddItem(id, loadData);
             }
             else
             {
                 if (existItem.Equals(loadData)) return;
-                lock (items)
-                {
-                    items[id] = loadData;
-                }
-                if (UpdatedItem != null) UpdatedItem(id);
+                ExecuteUpdateItem(id, loadData);
             }
         }
 
@@ -134,12 +126,40 @@ namespace DemoP2P
             var deletedIDs = GetIDs().Where(id => !existIDs.Contains(id));
             foreach (string id in deletedIDs)
             {
-                lock (items)
-                {
-                    items.Remove(id);
-                }
-                if (DeletedItem != null) DeletedItem(id);
+                ExecuteDeleteItem(id);
             }
+        }
+
+        private void ExecuteAddItem(string id, T data)
+        {
+            lock (items)
+            {
+                items.Add(id, data);
+            }
+            if (AddItem != null) AddItem(id);
+        }
+
+        private void ExecuteUpdateItem(string id, T data)
+        {
+            lock (items)
+            {
+                items[id] = data;
+            }
+            if (UpdatedItem != null) UpdatedItem(id);
+        }
+
+        private void ExecuteDeleteItem(string id)
+        {
+            lock (items)
+            {
+                items.Remove(id);
+            }
+            if (DeletedItem != null) DeletedItem(id);
+        }
+
+        public void Dispose()
+        {
+            peerName = null;
         }
     }
 }
