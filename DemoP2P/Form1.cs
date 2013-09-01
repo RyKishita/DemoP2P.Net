@@ -232,18 +232,6 @@ namespace DemoP2P
 
         private void OpenPeer()
         {
-            #region 表示名の確認
-
-            string displayName = MyData.DisplayName.Trim();
-            if (string.IsNullOrWhiteSpace(displayName))
-            {
-                MessageBox.Show("DisplayNameを入力してください。", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                propertyGridMyData.Focus();
-                return;
-            }
-
-            #endregion
-
             if (TargetGrobal)
             {
                 #region インデックスサーバー名の確認
@@ -326,7 +314,10 @@ namespace DemoP2P
                                 return;
                             }
 
-                            var addItem = listViewOtherUser.Items.Add(userData.DisplayName);
+                            string displayName = string.IsNullOrWhiteSpace(userData.DisplayName)
+                                ? "名前なし"
+                                : userData.DisplayName;
+                            var addItem = listViewOtherUser.Items.Add(displayName);
                             addItem.Name = id;
                             addItem.Tag = userData;
                         }
