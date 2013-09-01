@@ -99,7 +99,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxClassifier.Location = new System.Drawing.Point(160, 33);
             this.textBoxClassifier.Name = "textBoxClassifier";
-            this.textBoxClassifier.Size = new System.Drawing.Size(264, 19);
+            this.textBoxClassifier.Size = new System.Drawing.Size(263, 19);
             this.textBoxClassifier.TabIndex = 3;
             this.textBoxClassifier.Text = "testpeer";
             // 
@@ -231,7 +231,7 @@
             // buttonStartOrStop
             // 
             this.buttonStartOrStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonStartOrStop.Location = new System.Drawing.Point(3, 133);
+            this.buttonStartOrStop.Location = new System.Drawing.Point(3, 109);
             this.buttonStartOrStop.Name = "buttonStartOrStop";
             this.buttonStartOrStop.Size = new System.Drawing.Size(75, 23);
             this.buttonStartOrStop.TabIndex = 4;
@@ -241,6 +241,9 @@
             // 
             // listViewLog
             // 
+            this.listViewLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.listViewLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.listViewLog.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
@@ -249,7 +252,7 @@
             this.listViewLog.Location = new System.Drawing.Point(3, 3);
             this.listViewLog.MultiSelect = false;
             this.listViewLog.Name = "listViewLog";
-            this.listViewLog.Size = new System.Drawing.Size(427, 397);
+            this.listViewLog.Size = new System.Drawing.Size(426, 335);
             this.listViewLog.TabIndex = 0;
             this.listViewLog.UseCompatibleStateImageBehavior = false;
             this.listViewLog.View = System.Windows.Forms.View.Details;
@@ -262,7 +265,7 @@
             // 
             this.labelInterval.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelInterval.AutoSize = true;
-            this.labelInterval.Location = new System.Drawing.Point(224, 475);
+            this.labelInterval.Location = new System.Drawing.Point(224, 413);
             this.labelInterval.Name = "labelInterval";
             this.labelInterval.Size = new System.Drawing.Size(53, 12);
             this.labelInterval.TabIndex = 3;
@@ -276,7 +279,7 @@
             0,
             0,
             0});
-            this.numericUpDownInterval.Location = new System.Drawing.Point(283, 472);
+            this.numericUpDownInterval.Location = new System.Drawing.Point(283, 410);
             this.numericUpDownInterval.Maximum = new decimal(new int[] {
             600000,
             0,
@@ -301,7 +304,7 @@
             // 
             this.labelIntervalUnit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelIntervalUnit.AutoSize = true;
-            this.labelIntervalUnit.Location = new System.Drawing.Point(388, 475);
+            this.labelIntervalUnit.Location = new System.Drawing.Point(388, 413);
             this.labelIntervalUnit.Name = "labelIntervalUnit";
             this.labelIntervalUnit.Size = new System.Drawing.Size(31, 12);
             this.labelIntervalUnit.TabIndex = 5;
@@ -313,7 +316,7 @@
             this.checkBoxAutoLoad.AutoSize = true;
             this.checkBoxAutoLoad.Checked = true;
             this.checkBoxAutoLoad.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxAutoLoad.Location = new System.Drawing.Point(142, 473);
+            this.checkBoxAutoLoad.Location = new System.Drawing.Point(142, 411);
             this.checkBoxAutoLoad.Name = "checkBoxAutoLoad";
             this.checkBoxAutoLoad.Size = new System.Drawing.Size(72, 16);
             this.checkBoxAutoLoad.TabIndex = 2;
@@ -324,7 +327,7 @@
             // buttonLoad
             // 
             this.buttonLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonLoad.Location = new System.Drawing.Point(12, 469);
+            this.buttonLoad.Location = new System.Drawing.Point(12, 407);
             this.buttonLoad.Name = "buttonLoad";
             this.buttonLoad.Size = new System.Drawing.Size(124, 23);
             this.buttonLoad.TabIndex = 1;
@@ -347,7 +350,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxIndexServerAddress.Location = new System.Drawing.Point(160, 86);
             this.textBoxIndexServerAddress.Name = "textBoxIndexServerAddress";
-            this.textBoxIndexServerAddress.Size = new System.Drawing.Size(264, 19);
+            this.textBoxIndexServerAddress.Size = new System.Drawing.Size(263, 19);
             this.textBoxIndexServerAddress.TabIndex = 7;
             // 
             // tabControl1
@@ -361,7 +364,7 @@
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(441, 451);
+            this.tabControl1.Size = new System.Drawing.Size(440, 389);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPageInput
@@ -370,7 +373,7 @@
             this.tabPageInput.Location = new System.Drawing.Point(4, 22);
             this.tabPageInput.Name = "tabPageInput";
             this.tabPageInput.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageInput.Size = new System.Drawing.Size(433, 425);
+            this.tabPageInput.Size = new System.Drawing.Size(432, 363);
             this.tabPageInput.TabIndex = 0;
             this.tabPageInput.Text = "入力";
             this.tabPageInput.UseVisualStyleBackColor = true;
@@ -390,8 +393,8 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.splitContainer1);
-            this.splitContainer2.Size = new System.Drawing.Size(427, 419);
-            this.splitContainer2.SplitterDistance = 159;
+            this.splitContainer2.Size = new System.Drawing.Size(426, 357);
+            this.splitContainer2.SplitterDistance = 135;
             this.splitContainer2.TabIndex = 9;
             // 
             // propertyGridMyData
@@ -403,7 +406,7 @@
             this.propertyGridMyData.Location = new System.Drawing.Point(3, 3);
             this.propertyGridMyData.Name = "propertyGridMyData";
             this.propertyGridMyData.PropertySort = System.Windows.Forms.PropertySort.NoSort;
-            this.propertyGridMyData.Size = new System.Drawing.Size(421, 124);
+            this.propertyGridMyData.Size = new System.Drawing.Size(420, 100);
             this.propertyGridMyData.TabIndex = 6;
             this.propertyGridMyData.ToolbarVisible = false;
             this.propertyGridMyData.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGridMyData_PropertyValueChanged);
@@ -421,8 +424,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.propertyGridOtherData);
-            this.splitContainer1.Size = new System.Drawing.Size(427, 256);
-            this.splitContainer1.SplitterDistance = 142;
+            this.splitContainer1.Size = new System.Drawing.Size(426, 218);
+            this.splitContainer1.SplitterDistance = 141;
             this.splitContainer1.TabIndex = 8;
             // 
             // listViewOtherUser
@@ -437,7 +440,7 @@
             this.listViewOtherUser.Location = new System.Drawing.Point(0, 0);
             this.listViewOtherUser.MultiSelect = false;
             this.listViewOtherUser.Name = "listViewOtherUser";
-            this.listViewOtherUser.Size = new System.Drawing.Size(142, 256);
+            this.listViewOtherUser.Size = new System.Drawing.Size(141, 218);
             this.listViewOtherUser.TabIndex = 7;
             this.listViewOtherUser.UseCompatibleStateImageBehavior = false;
             this.listViewOtherUser.View = System.Windows.Forms.View.Details;
@@ -455,7 +458,7 @@
             this.propertyGridOtherData.Location = new System.Drawing.Point(0, 0);
             this.propertyGridOtherData.Name = "propertyGridOtherData";
             this.propertyGridOtherData.PropertySort = System.Windows.Forms.PropertySort.NoSort;
-            this.propertyGridOtherData.Size = new System.Drawing.Size(281, 256);
+            this.propertyGridOtherData.Size = new System.Drawing.Size(281, 218);
             this.propertyGridOtherData.TabIndex = 7;
             this.propertyGridOtherData.ToolbarVisible = false;
             // 
@@ -465,7 +468,7 @@
             this.tabPageSetting.Location = new System.Drawing.Point(4, 22);
             this.tabPageSetting.Name = "tabPageSetting";
             this.tabPageSetting.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSetting.Size = new System.Drawing.Size(433, 425);
+            this.tabPageSetting.Size = new System.Drawing.Size(432, 363);
             this.tabPageSetting.TabIndex = 1;
             this.tabPageSetting.Text = "設定";
             this.tabPageSetting.UseVisualStyleBackColor = true;
@@ -485,7 +488,7 @@
             this.panelSetting.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelSetting.Location = new System.Drawing.Point(3, 3);
             this.panelSetting.Name = "panelSetting";
-            this.panelSetting.Size = new System.Drawing.Size(427, 419);
+            this.panelSetting.Size = new System.Drawing.Size(426, 357);
             this.panelSetting.TabIndex = 10;
             // 
             // tabPageLog
@@ -494,7 +497,7 @@
             this.tabPageLog.Controls.Add(this.listViewLog);
             this.tabPageLog.Location = new System.Drawing.Point(4, 22);
             this.tabPageLog.Name = "tabPageLog";
-            this.tabPageLog.Size = new System.Drawing.Size(433, 425);
+            this.tabPageLog.Size = new System.Drawing.Size(432, 363);
             this.tabPageLog.TabIndex = 2;
             this.tabPageLog.Text = "ログ";
             this.tabPageLog.UseVisualStyleBackColor = true;
@@ -505,7 +508,7 @@
             this.checkBoxAutoScroll.AutoSize = true;
             this.checkBoxAutoScroll.Checked = true;
             this.checkBoxAutoScroll.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxAutoScroll.Location = new System.Drawing.Point(3, 406);
+            this.checkBoxAutoScroll.Location = new System.Drawing.Point(3, 344);
             this.checkBoxAutoScroll.Name = "checkBoxAutoScroll";
             this.checkBoxAutoScroll.Size = new System.Drawing.Size(94, 16);
             this.checkBoxAutoScroll.TabIndex = 1;
@@ -516,13 +519,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(465, 504);
+            this.ClientSize = new System.Drawing.Size(464, 442);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.checkBoxAutoLoad);
             this.Controls.Add(this.labelIntervalUnit);
             this.Controls.Add(this.buttonLoad);
             this.Controls.Add(this.labelInterval);
             this.Controls.Add(this.numericUpDownInterval);
+            this.MinimumSize = new System.Drawing.Size(480, 480);
             this.Name = "Form1";
             this.Text = "P2Pデモ";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
