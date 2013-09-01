@@ -119,7 +119,7 @@ namespace DemoP2P
             UpdateUI();
         }
 
-        private void buttonStartOrUpdate_Click(object sender, EventArgs e)
+        private void buttonStartOrStop_Click(object sender, EventArgs e)
         {
             if (PeerOpened)
             {
@@ -366,7 +366,7 @@ namespace DemoP2P
         {
             #region Input
 
-            buttonStartOrUpdate.Text = PeerOpened ? "停止" : "開始";
+            buttonStartOrStop.Text = PeerOpened ? "停止" : "開始";
 
             #endregion
 

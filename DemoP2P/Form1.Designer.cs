@@ -42,7 +42,7 @@
             this.radioButtonGlobal = new System.Windows.Forms.RadioButton();
             this.radioButtonAllLinkLocal = new System.Windows.Forms.RadioButton();
             this.radioButtonAvailable = new System.Windows.Forms.RadioButton();
-            this.buttonStartOrUpdate = new System.Windows.Forms.Button();
+            this.buttonStartOrStop = new System.Windows.Forms.Button();
             this.listViewLog = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.timerLoad = new System.Windows.Forms.Timer(this.components);
@@ -228,16 +228,16 @@
             this.radioButtonAvailable.UseVisualStyleBackColor = true;
             this.radioButtonAvailable.CheckedChanged += new System.EventHandler(this.radioButtonNetwork_CheckedChanged);
             // 
-            // buttonStartOrUpdate
+            // buttonStartOrStop
             // 
-            this.buttonStartOrUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonStartOrUpdate.Location = new System.Drawing.Point(3, 133);
-            this.buttonStartOrUpdate.Name = "buttonStartOrUpdate";
-            this.buttonStartOrUpdate.Size = new System.Drawing.Size(75, 23);
-            this.buttonStartOrUpdate.TabIndex = 4;
-            this.buttonStartOrUpdate.Text = "開始";
-            this.buttonStartOrUpdate.UseVisualStyleBackColor = true;
-            this.buttonStartOrUpdate.Click += new System.EventHandler(this.buttonStartOrUpdate_Click);
+            this.buttonStartOrStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonStartOrStop.Location = new System.Drawing.Point(3, 133);
+            this.buttonStartOrStop.Name = "buttonStartOrStop";
+            this.buttonStartOrStop.Size = new System.Drawing.Size(75, 23);
+            this.buttonStartOrStop.TabIndex = 4;
+            this.buttonStartOrStop.Text = "開始";
+            this.buttonStartOrStop.UseVisualStyleBackColor = true;
+            this.buttonStartOrStop.Click += new System.EventHandler(this.buttonStartOrStop_Click);
             // 
             // listViewLog
             // 
@@ -385,7 +385,7 @@
             // splitContainer2.Panel1
             // 
             this.splitContainer2.Panel1.Controls.Add(this.propertyGridMyData);
-            this.splitContainer2.Panel1.Controls.Add(this.buttonStartOrUpdate);
+            this.splitContainer2.Panel1.Controls.Add(this.buttonStartOrStop);
             // 
             // splitContainer2.Panel2
             // 
@@ -568,7 +568,7 @@
         private System.Windows.Forms.RadioButton radioButtonGlobal;
         private System.Windows.Forms.RadioButton radioButtonAllLinkLocal;
         private System.Windows.Forms.RadioButton radioButtonAvailable;
-        private System.Windows.Forms.Button buttonStartOrUpdate;
+        private System.Windows.Forms.Button buttonStartOrStop;
         private System.Windows.Forms.ListView listViewLog;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.Timer timerLoad;
