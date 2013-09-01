@@ -304,7 +304,7 @@ namespace DemoP2P
             Action action = () =>
                 {
                     string id = peerNameRecord.Comment;
-                    var userData = UserData.Deserialize(peerNameRecord.Data);
+                    var userData = Serializer.Deserialize<UserData>(peerNameRecord.Data);
 
                     lock (listViewOtherUser)
                     {
@@ -379,7 +379,7 @@ namespace DemoP2P
 
         private void SetSendData()
         {
-            peerNameRegistration.Data = MyData.Serialize();
+            peerNameRegistration.Data = Serializer.Serialize(MyData);
             AddLog(peerNameRegistration.Comment, MyData, LogType.Send);
         }
 
@@ -428,7 +428,7 @@ namespace DemoP2P
 
         void AddLog(PeerNameRecord peerNameRecord)
         {
-            AddLog(peerNameRecord.Comment, UserData.Deserialize(peerNameRecord.Data), LogType.Received);
+            AddLog(peerNameRecord.Comment, Serializer.Deserialize<UserData>(peerNameRecord.Data), LogType.Received);
         }
 
         private void AddLog(PeerNameRecordCollection peerNameRecordCollection)
