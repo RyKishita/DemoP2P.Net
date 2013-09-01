@@ -123,7 +123,15 @@ namespace DemoP2P
         {
             if (PeerOpened)
             {
-                UpdateMyData();
+                ClosePeer();
+                AddLog("ClosePeer", LogType.System);
+
+                OtherData = null;
+                lock (listViewOtherUser)
+                {
+                    listViewOtherUser.Items.Clear();
+                }
+                UpdateUI();
             }
             else
             {
@@ -134,19 +142,6 @@ namespace DemoP2P
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             ClosePeer();
-        }
-
-        private void buttonClose_Click(object sender, EventArgs e)
-        {
-            ClosePeer();
-            AddLog("ClosePeer", LogType.System);
-
-            OtherData = null;
-            lock (listViewOtherUser)
-            {
-                listViewOtherUser.Items.Clear();
-            }
-            UpdateUI();
         }
 
         private void timerLoad_Tick(object sender, EventArgs e)
@@ -179,6 +174,15 @@ namespace DemoP2P
         private void listViewOtherUser_SelectedIndexChanged(object sender, EventArgs e)
         {
             OtherData = SelectedOtherData;
+        }
+
+        private void propertyGridMyData_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        {
+            if (PeerOpened)
+            {
+                register.SetData(MyData);
+                AddLog("SetData", LogType.System);
+            }
         }
 
         #region ピアイベント
@@ -298,13 +302,6 @@ namespace DemoP2P
             buttonLoad.PerformClick();
         }
 
-        private void UpdateMyData()
-        {
-            register.SetData(MyData);
-
-            AddLog("UpdateSend", LogType.System);
-        }
-
         private void SetOtherUser(string id)
         {
             Action action = () =>
@@ -378,8 +375,7 @@ namespace DemoP2P
         {
             #region Input
 
-            buttonStartOrUpdate.Text = PeerOpened ? "更新" : "開始";
-            buttonClose.Enabled = PeerOpened;
+            buttonStartOrUpdate.Text = PeerOpened ? "停止" : "開始";
 
             #endregion
 
