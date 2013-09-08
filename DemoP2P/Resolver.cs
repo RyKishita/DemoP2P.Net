@@ -134,10 +134,11 @@ namespace DemoP2P
 
         void pnr_ResolveCompleted(object sender, ResolveCompletedEventArgs e)
         {
+            if (!e.Cancelled)
+            {
+                CheckDeleted(e.PeerNameRecordCollection);
+            }
             if (Completed != null) Completed(e.UserState as string, e.Cancelled);
-            if (e.Cancelled) return;
-
-            CheckDeleted(e.PeerNameRecordCollection);
         }
 
         static string GetUserID(PeerNameRecord peerNameRecord)
