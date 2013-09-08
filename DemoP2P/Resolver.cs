@@ -46,9 +46,10 @@ namespace DemoP2P
 
         /// <summary>
         /// 項目が削除された時のイベント
-        /// 引数：削除された項目のID
+        /// 引数1：削除された項目のID
+        /// 引数2：削除された項目
         /// </summary>
-        public event Action<string> DeletedItem;
+        public event Action<string, T> DeletedItem;
 
         /// <summary>
         /// ResolveAsync処理の進捗イベント
@@ -198,11 +199,15 @@ namespace DemoP2P
 
         private void ExecuteDeleteItem(string id)
         {
-            lock (items)
+            var item = GetItem(id);
+            if (item != null)
             {
-                items.Remove(id);
+                lock (items)
+                {
+                    items.Remove(id);
+                }
             }
-            if (DeletedItem != null) DeletedItem(id);
+            if (DeletedItem != null) DeletedItem(id, item);
         }
 
         /// <summary>

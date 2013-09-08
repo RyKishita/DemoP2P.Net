@@ -198,7 +198,7 @@ namespace DemoP2P
             AddLog("resolver_UpdatedItem", LogType.System);
         }
 
-        void resolver_DeletedItem(string id)
+        void resolver_DeletedItem(string id, UserData data)
         {
             DeleteOtherUser(id);
             AddLog("resolver_DeletedItem", LogType.System);
