@@ -25,7 +25,6 @@ namespace DemoP2P
         Register<UserData> register = null;
         Resolver<UserData> resolver = null;
         volatile bool bLoading = false;
-        readonly string myID = Guid.NewGuid().ToString();
 
         #endregion
 
@@ -280,7 +279,7 @@ namespace DemoP2P
 
             MakeResolver();
 
-            register = new Register<UserData>(Cloud, peerName, PortNo, myID);
+            register = new Register<UserData>(Cloud, peerName, PortNo);
             register.SetData(MyData);
 
             UpdateUI();

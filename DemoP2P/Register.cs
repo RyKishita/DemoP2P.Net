@@ -19,18 +19,26 @@ namespace DemoP2P
         /// <param name="cloud">対象となるネットワーク</param>
         /// <param name="peerName">登録ピア名</param>
         /// <param name="portNo">ポート</param>
-        /// <param name="userID">自分のID</param>
-        public Register(Cloud cloud, PeerName peerName, int portNo, string userID)
+        public Register(Cloud cloud, PeerName peerName, int portNo)
         {
             peerNameRegistration = new PeerNameRegistration(peerName, portNo)
             {
-                Cloud = cloud,
-                Comment = userID
+                Cloud = cloud
             };
+            MyID = Guid.NewGuid().ToString();
         }
 
         PeerNameRegistration peerNameRegistration;
         T oldData = null;
+
+        /// <summary>
+        /// 自分のID
+        /// </summary>
+        public string MyID
+        {
+            get { return peerNameRegistration.Comment; }
+            private set { peerNameRegistration.Comment = value; }
+        }
 
         /// <summary>
         /// データをセット
