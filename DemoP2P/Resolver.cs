@@ -58,7 +58,7 @@ namespace DemoP2P
         public ResolveToken ResolveAsync()
         {
             var token = new ResolveToken();
-            peerNameResolver.ResolveAsync(peerName, cloud, token.ID);
+            peerNameResolver.ResolveAsync(peerName, cloud, token);
             return token;
         }
 
@@ -68,17 +68,17 @@ namespace DemoP2P
         /// <param name="token">処理毎の識別トークン。ResolveAsyncの戻り値</param>
         public void ResolveAsyncCancel(ResolveToken token)
         {
-            peerNameResolver.ResolveAsyncCancel(token.ID);
+            peerNameResolver.ResolveAsyncCancel(token);
         }
 
         private void Pnr_ResolveProgressChanged(object sender, ResolveProgressChangedEventArgs e)
         {
-            ProgressChanged?.Invoke(new ResolveToken(e.UserState), e.ProgressPercentage, GetData(e.PeerNameRecord));
+            ProgressChanged?.Invoke(e.UserState as ResolveToken, e.ProgressPercentage, GetData(e.PeerNameRecord));
         }
 
         private void Pnr_ResolveCompleted(object sender, ResolveCompletedEventArgs e)
         {
-            Completed?.Invoke(new ResolveToken(e.UserState), GetDatas(e.PeerNameRecordCollection), e.Cancelled);
+            Completed?.Invoke(e.UserState as ResolveToken, GetDatas(e.PeerNameRecordCollection), e.Cancelled);
         }
 
         static T GetData(PeerNameRecord peerNameRecord)

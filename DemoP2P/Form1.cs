@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.PeerToPeer;
-using System.Net;
 
 namespace DemoP2P
 {
@@ -66,20 +61,20 @@ namespace DemoP2P
             {
                 if (IsTargetGrobal())
                 {
-                    #region インデックスサーバー名の確認
-
-                    string indexServerAddress = GetInputIndexServerAddress();
-
-                    if (string.IsNullOrWhiteSpace(indexServerAddress))
+                    void FailedAction(string message)
                     {
-                        MessageBox.Show(labelIndexServerAddress.Text + "を入力してください。", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(message, Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                         tabControl1.SelectedTab = tabPageSetting;
                         textBoxIndexServerAddress.SelectAll();
                         textBoxIndexServerAddress.Focus();
+                    };
+
+                    string indexServerAddress = GetInputIndexServerAddress();
+                    if (string.IsNullOrWhiteSpace(indexServerAddress))
+                    {
+                        FailedAction(labelIndexServerAddress.Text + "を入力してください。");
                         return;
                     }
-
-                    #endregion
 
                     try
                     {
@@ -87,19 +82,13 @@ namespace DemoP2P
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        tabControl1.SelectedTab = tabPageSetting;
-                        textBoxIndexServerAddress.SelectAll();
-                        textBoxIndexServerAddress.Focus();
+                        FailedAction(ex.Message);
                         return;
                     }
                 }
                 else
                 {
-                    #region 入力ピア名の検証
-
                     string classifier = GetInputClassifier();
-
                     if (string.IsNullOrWhiteSpace(classifier))
                     {
                         MessageBox.Show(labelClassifier.Text + "を入力してください。", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -108,8 +97,6 @@ namespace DemoP2P
                         textBoxClassifier.Focus();
                         return;
                     }
-
-                    #endregion
 
                     peerName = new PeerName(classifier, GetSelectedPeerNameType());
                 }
@@ -359,25 +346,17 @@ namespace DemoP2P
             listViewOtherUser.BeginUpdate();
             try
             {
-                var items = listViewOtherUser.Items.Find(userData.ID, false);
-                if (0 < items.Length)
-                {
-                    var item = items[0];
-                    item.Text = userData.DisplayName;
-                    item.Tag = userData;
-                    if (item.Selected)
-                    {
-                        OtherData = userData;
-                    }
-                    return;
-                }
+                var listViewItems = listViewOtherUser.Items;
 
-                string displayName = string.IsNullOrWhiteSpace(userData.DisplayName)
-                    ? "名前なし"
-                    : userData.DisplayName;
-                var addItem = listViewOtherUser.Items.Add(displayName);
-                addItem.Name = userData.ID;
-                addItem.Tag = userData;
+                var item = listViewItems.Find(userData.ID, false).FirstOrDefault() ?? listViewItems.Add("");
+                item.Text = string.IsNullOrWhiteSpace(userData.DisplayName) ? "名前なし" : userData.DisplayName;
+                item.Name = userData.ID;
+                item.Tag = userData;
+
+                if (item.Selected)
+                {
+                    OtherData = userData;
+                }
             }
             finally
             {
@@ -390,14 +369,11 @@ namespace DemoP2P
             listViewOtherUser.BeginUpdate();
             try
             {
-                var existIDs = userDatas.Select(userData => userData.ID);
-                foreach(ListViewItem item in listViewOtherUser.Items)
-                {
-                    if (!existIDs.Contains(item.Name))
-                    {
-                        item.Remove();
-                    }
-                }
+                var existIDs = userDatas.Select(userData => userData.ID).ToList();
+                listViewOtherUser.Items.Cast<ListViewItem>()
+                    .Where(item => !existIDs.Contains(item.Name))
+                    .ToList()
+                    .ForEach(item => item.Remove());
             }
             finally
             {

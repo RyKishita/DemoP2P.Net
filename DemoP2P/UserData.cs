@@ -3,19 +3,11 @@
 namespace DemoP2P
 {
     [Serializable]
-    class UserData : IEquatable<UserData>, ICloneable
+    class UserData
     {
         public UserData()
         {
 
-        }
-
-        public UserData(UserData src)
-        {
-            this.ID = src.ID;
-            this.DisplayName = src.DisplayName;
-            this.Flag1 = src.Flag1;
-            this.Flag2 = src.Flag2;
         }
 
         public string ID { get; set; } = Guid.NewGuid().ToString();
@@ -25,7 +17,7 @@ namespace DemoP2P
 
         public override string ToString()
         {
-            return string.Format("DisplayName={0},Flag1={1},Flag2={2}", DisplayName, Flag1, Flag2);
+            return $"{nameof(DisplayName)}={DisplayName},{nameof(Flag1)}={Flag1},{nameof(Flag2)}={Flag2}";
         }
 
         public override int GetHashCode()
@@ -44,11 +36,6 @@ namespace DemoP2P
             if (object.ReferenceEquals(this, other)) return true;
 
             return this.ID == other.ID;
-        }
-
-        public object Clone()
-        {
-            return new UserData(this);
         }
     }
 }
