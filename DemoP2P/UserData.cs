@@ -12,11 +12,13 @@ namespace DemoP2P
 
         public UserData(UserData src)
         {
+            this.ID = src.ID;
             this.DisplayName = src.DisplayName;
             this.Flag1 = src.Flag1;
             this.Flag2 = src.Flag2;
         }
 
+        public string ID { get; set; } = Guid.NewGuid().ToString();
         public string DisplayName { get; set; }
         public bool Flag1 { get; set; }
         public bool Flag2 { get; set; }
@@ -41,9 +43,7 @@ namespace DemoP2P
             if (other == null) return false;
             if (object.ReferenceEquals(this, other)) return true;
 
-            return this.DisplayName == other.DisplayName &&
-                    this.Flag1 == other.Flag1 &&
-                    this.Flag2 == other.Flag2;
+            return this.ID == other.ID;
         }
 
         public object Clone()

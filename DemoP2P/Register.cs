@@ -11,7 +11,7 @@ namespace DemoP2P
     /// PeerNameRegistrationラッパー
     /// </summary>
     /// <typeparam name="T">処理対象データ</typeparam>
-    class Register<T> : IDisposable where T : class, IEquatable<T>, ICloneable
+    class Register<T> : IDisposable where T : class
     {
         /// <summary>
         /// コンストラクタ
@@ -21,24 +21,10 @@ namespace DemoP2P
         /// <param name="portNo">ポート</param>
         public Register(Cloud cloud, PeerName peerName, int portNo)
         {
-            peerNameRegistration = new PeerNameRegistration(peerName, portNo)
-            {
-                Cloud = cloud
-            };
-            MyID = Guid.NewGuid().ToString();
+            peerNameRegistration = new PeerNameRegistration(peerName, portNo) { Cloud = cloud };
         }
 
-        PeerNameRegistration peerNameRegistration;
-        T oldData = null;
-
-        /// <summary>
-        /// 自分のID
-        /// </summary>
-        public string MyID
-        {
-            get { return peerNameRegistration.Comment; }
-            private set { peerNameRegistration.Comment = value; }
-        }
+        private PeerNameRegistration peerNameRegistration;
 
         /// <summary>
         /// データを登録
@@ -46,8 +32,7 @@ namespace DemoP2P
         /// <param name="data">データ</param>
         public void RegistData(T data)
         {
-            if (data == null) throw new ArgumentNullException("data");
-            if (oldData != null && oldData.Equals(data)) return;
+            if (data == null) throw new ArgumentNullException(nameof(data));
 
             peerNameRegistration.Data = Serializer.Serialize(data);
             if (peerNameRegistration.IsRegistered())
@@ -58,8 +43,6 @@ namespace DemoP2P
             {
                 peerNameRegistration.Start();
             }
-
-            oldData = data.Clone() as T;
         }
 
         /// <summary>
@@ -67,6 +50,7 @@ namespace DemoP2P
         /// </summary>
         public void Dispose()
         {
+            if (null == peerNameRegistration) return;
             peerNameRegistration.Stop();
             peerNameRegistration = null;
         }

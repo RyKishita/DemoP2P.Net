@@ -45,6 +45,7 @@
             this.buttonStartOrStop = new System.Windows.Forms.Button();
             this.listViewLog = new System.Windows.Forms.ListView();
             this.columnHeaderLogDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderLogToken = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderLogActionName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderLogMessage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.timerLoad = new System.Windows.Forms.Timer(this.components);
@@ -241,10 +242,11 @@
             this.listViewLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.listViewLog.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderLogDate,
+            this.columnHeaderLogToken,
             this.columnHeaderLogActionName,
             this.columnHeaderLogMessage});
             this.listViewLog.FullRowSelect = true;
-            this.listViewLog.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.listViewLog.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewLog.Location = new System.Drawing.Point(12, 530);
             this.listViewLog.MultiSelect = false;
             this.listViewLog.Name = "listViewLog";
@@ -252,6 +254,26 @@
             this.listViewLog.TabIndex = 0;
             this.listViewLog.UseCompatibleStateImageBehavior = false;
             this.listViewLog.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeaderLogDate
+            // 
+            this.columnHeaderLogDate.Text = "時刻";
+            this.columnHeaderLogDate.Width = 50;
+            // 
+            // columnHeaderLogToken
+            // 
+            this.columnHeaderLogToken.Text = "処理ID";
+            this.columnHeaderLogToken.Width = 50;
+            // 
+            // columnHeaderLogActionName
+            // 
+            this.columnHeaderLogActionName.Text = "アクション";
+            this.columnHeaderLogActionName.Width = 100;
+            // 
+            // columnHeaderLogMessage
+            // 
+            this.columnHeaderLogMessage.Text = "メッセージ";
+            this.columnHeaderLogMessage.Width = 400;
             // 
             // timerLoad
             // 
@@ -435,7 +457,7 @@
             this.tabPageSetting.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.tabPageSetting.Name = "tabPageSetting";
             this.tabPageSetting.Padding = new System.Windows.Forms.Padding(6, 5, 6, 5);
-            this.tabPageSetting.Size = new System.Drawing.Size(831, 539);
+            this.tabPageSetting.Size = new System.Drawing.Size(831, 437);
             this.tabPageSetting.TabIndex = 1;
             this.tabPageSetting.Text = "設定";
             this.tabPageSetting.UseVisualStyleBackColor = true;
@@ -455,7 +477,7 @@
             this.panelSetting.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelSetting.Location = new System.Drawing.Point(6, 5);
             this.panelSetting.Name = "panelSetting";
-            this.panelSetting.Size = new System.Drawing.Size(819, 529);
+            this.panelSetting.Size = new System.Drawing.Size(819, 427);
             this.panelSetting.TabIndex = 10;
             // 
             // checkBoxAutoScroll
@@ -554,6 +576,7 @@
         private System.Windows.Forms.PropertyGrid propertyGridOtherData;
         private System.Windows.Forms.ColumnHeader columnHeaderLogMessage;
         private System.Windows.Forms.ColumnHeader columnHeaderLogActionName;
+        private System.Windows.Forms.ColumnHeader columnHeaderLogToken;
     }
 }
 

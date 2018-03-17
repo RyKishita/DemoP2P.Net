@@ -22,6 +22,7 @@ namespace DemoP2P
         #region フィールド
 
         PeerName peerName = null;
+        Cloud cloud = null;
         Register<UserData> register = null;
         Resolver<UserData> resolver = null;
 
@@ -113,6 +114,8 @@ namespace DemoP2P
                     peerName = new PeerName(classifier, GetSelectedPeerNameType());
                 }
 
+                cloud = GetInputCloud();
+
                 OpenPeer();
 
                 UpdateUI();
@@ -138,9 +141,8 @@ namespace DemoP2P
                 MessageBox.Show("開始していません。", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            AddLog("StartLoad", "");
             SetLoadButton(true);
-            resolver.ResolveAsync();
+            AddLog("StartLoad", resolver.ResolveAsync());
         }
 
         private void CheckBoxAutoLoad_CheckedChanged(object sender, EventArgs e)
@@ -167,43 +169,26 @@ namespace DemoP2P
             if (IsPeerOpened())
             {
                 register.RegistData(MyData);
-                AddLog("RegistData", MyData.ToString());
+                AddLog("RegistData", null, MyData.ToString());
             }
         }
 
         #region ピアイベント
 
-        private void Resolver_AddNode(string id)
+        private void Resolver_ProgressChanged(ResolveToken token, int progressPercentage, UserData userData)
         {
-            SetOtherUser(id);
-            AddLog(nameof(Resolver_AddNode), id);
+            SetUserData(userData);
+            AddLog(nameof(Resolver_ProgressChanged) + $"({progressPercentage})", token, userData.ToString());
         }
 
-        private void Resolver_UpdatNodeData(string id)
+        private void Resolver_Completed(ResolveToken token, IEnumerable<UserData> userDatas, bool cancelled)
         {
-            SetOtherUser(id);
-            AddLog(nameof(Resolver_UpdatNodeData), id);
-        }
+            AddLog(nameof(Resolver_Completed), token, cancelled ? "Cancelled" : userDatas.Count().ToString() + "項目");
 
-        private void Resolver_DeleteNode(string id, UserData data)
-        {
-            DeleteOtherUser(id);
-            AddLog(nameof(Resolver_DeleteNode), id);
-        }
-
-        private void Resolver_ProgressChanged(string userState, int progressPercentage)
-        {
-            AddLog(nameof(Resolver_ProgressChanged) + $"({progressPercentage})", $"UserState:{userState}");
-        }
-
-        private void Resolver_Completed(string userState, bool cancelled)
-        {
-            string messsage = $"UserState:{userState}";
-            if (cancelled)
+            if (!cancelled)
             {
-                messsage = "[Cancelled]" + messsage;
+                CheckDeleted(userDatas);
             }
-            AddLog(nameof(Resolver_Completed), messsage);
 
             RestartTimer();
             SetLoadButton(false);
@@ -225,7 +210,7 @@ namespace DemoP2P
         {
             if (null == peerName) return;
 
-            AddLog(nameof(OpenPeer), "");
+            AddLog(nameof(OpenPeer));
 
             MakeResolver();
             MakeRegister();
@@ -237,51 +222,7 @@ namespace DemoP2P
             DestroyResolver();
             DestroyRegister();
 
-            AddLog(nameof(ClosePeer), "");
-        }
-
-        private void SetOtherUser(string id)
-        {
-            UserData userData = resolver.GetItemData(id);
-
-            listViewOtherUser.BeginUpdate();
-            try
-            {
-                foreach (ListViewItem item in listViewOtherUser.Items)
-                {
-                    if (item.Name != id) continue;
-
-                    item.Text = userData.DisplayName;
-                    item.Tag = userData;
-                    if (item.Selected)
-                    {
-                        OtherData = userData;
-                    }
-                    return;
-                }
-
-                string displayName = string.IsNullOrWhiteSpace(userData.DisplayName)
-                    ? "名前なし"
-                    : userData.DisplayName;
-                var addItem = listViewOtherUser.Items.Add(displayName);
-                addItem.Name = id;
-                addItem.Tag = userData;
-            }
-            finally
-            {
-                listViewOtherUser.EndUpdate();
-            }
-        }
-
-        private void DeleteOtherUser(string id)
-        {
-            UserData userData = resolver.GetItemData(id);
-
-            var items = listViewOtherUser.Items.Find(id, false);
-            if (items.Length == 1)
-            {
-                listViewOtherUser.Items.Remove(items[0]);
-            }
+            AddLog(nameof(ClosePeer));
         }
 
         private void UpdateUI()
@@ -341,10 +282,7 @@ namespace DemoP2P
         {
             DestroyResolver();
 
-            resolver = new Resolver<UserData>(peerName);
-            resolver.AddNode += Resolver_AddNode;
-            resolver.UpdateNodeData += Resolver_UpdatNodeData;
-            resolver.DeleteNode += Resolver_DeleteNode;
+            resolver = new Resolver<UserData>(cloud, peerName);
             resolver.ProgressChanged += Resolver_ProgressChanged;
             resolver.Completed += Resolver_Completed;
         }
@@ -353,9 +291,6 @@ namespace DemoP2P
         {
             if (null == resolver) return;
 
-            resolver.AddNode -= Resolver_AddNode;
-            resolver.UpdateNodeData -= Resolver_UpdatNodeData;
-            resolver.DeleteNode -= Resolver_DeleteNode;
             resolver.ProgressChanged -= Resolver_ProgressChanged;
             resolver.Completed -= Resolver_Completed;
             resolver.Dispose();
@@ -364,19 +299,19 @@ namespace DemoP2P
 
         #region AddLog
 
-        void AddLog(string actionName, string message)
+        void AddLog(string actionName, ResolveToken token = null, string message = "")
         {
             listViewLog.BeginUpdate();
             try
             {
                 var item = listViewLog.Items.Add(DateTime.Now.ToLongTimeString());
+                item.SubItems.Add(null == token? "": token.ToString());
                 item.SubItems.Add(actionName);
                 item.SubItems.Add(message);
                 if (checkBoxAutoScroll.Checked)
                 {
                     item.EnsureVisible();
                 }
-                listViewLog.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             }
             finally
             {
@@ -417,6 +352,57 @@ namespace DemoP2P
                 userData = listViewOtherUser.SelectedItems[0].Tag as UserData;
             }
             return userData;
+        }
+
+        private void SetUserData(UserData userData)
+        {
+            listViewOtherUser.BeginUpdate();
+            try
+            {
+                var items = listViewOtherUser.Items.Find(userData.ID, false);
+                if (0 < items.Length)
+                {
+                    var item = items[0];
+                    item.Text = userData.DisplayName;
+                    item.Tag = userData;
+                    if (item.Selected)
+                    {
+                        OtherData = userData;
+                    }
+                    return;
+                }
+
+                string displayName = string.IsNullOrWhiteSpace(userData.DisplayName)
+                    ? "名前なし"
+                    : userData.DisplayName;
+                var addItem = listViewOtherUser.Items.Add(displayName);
+                addItem.Name = userData.ID;
+                addItem.Tag = userData;
+            }
+            finally
+            {
+                listViewOtherUser.EndUpdate();
+            }
+        }
+
+        private void CheckDeleted(IEnumerable<UserData> userDatas)
+        {
+            listViewOtherUser.BeginUpdate();
+            try
+            {
+                var existIDs = userDatas.Select(userData => userData.ID);
+                foreach(ListViewItem item in listViewOtherUser.Items)
+                {
+                    if (!existIDs.Contains(item.Name))
+                    {
+                        item.Remove();
+                    }
+                }
+            }
+            finally
+            {
+                listViewOtherUser.EndUpdate();
+            }
         }
 
         #endregion

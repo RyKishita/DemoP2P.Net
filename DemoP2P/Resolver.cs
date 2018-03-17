@@ -9,137 +9,76 @@ namespace DemoP2P
     /// PeerNameResolverラッパー
     /// </summary>
     /// <typeparam name="T">処理対象データ</typeparam>
-    class Resolver<T> : IDisposable where T : class, IEquatable<T>
+    class Resolver<T> : IDisposable where T : class
     {
         /// <summary>
         /// コンストラクタ
         /// </summary>
+        /// <param name="cloud">対象となるネットワーク</param>
         /// <param name="peerName">登録ピア名</param>
-        public Resolver(PeerName peerName)
+        public Resolver(Cloud cloud, PeerName peerName)
         {
+            this.cloud = cloud;
             this.peerName = peerName;
-
-            peerNameResolver.ResolveProgressChanged += Pnr_ResolveProgressChanged;
-            peerNameResolver.ResolveCompleted += Pnr_ResolveCompleted;
+            Setup();
         }
 
+        private Cloud cloud;
         private PeerName peerName;
-        private PeerNameResolver peerNameResolver = new PeerNameResolver();
-        private Dictionary<string, T> items = new Dictionary<string, T>();
-
-        /// <summary>
-        /// 新しいノードが追加された時のイベント
-        /// 引数：追加された項目のID
-        /// </summary>
-        public event Action<string> AddNode;
-
-        /// <summary>
-        /// ノードが持つデータが更新された時のイベント
-        /// 引数：更新された項目のID
-        /// </summary>
-        public event Action<string> UpdateNodeData;
-
-        /// <summary>
-        /// ノードが削除された時のイベント
-        /// 引数1：削除された項目のID
-        /// 引数2：削除された項目
-        /// </summary>
-        public event Action<string, T> DeleteNode;
+        private PeerNameResolver peerNameResolver = null;
 
         /// <summary>
         /// ResolveAsync処理の進捗イベント
-        /// 引数1：処理毎の識別ID(ResolveAsyncの戻り値)
+        /// 引数1：処理毎の識別トークン。ResolveAsyncの戻り値
         /// 引数2：処理の進捗%
+        /// 引数3：読み込まれたデータ
         /// </summary>
-        public event Action<string, int> ProgressChanged;
+        public event Action<ResolveToken, int, T> ProgressChanged;
 
         /// <summary>
         /// ResolveAsync処理の完了、または取り消し後のイベント
-        /// 引数1：処理毎の識別ID(ResolveAsyncの戻り値)
-        /// 引数2：処理が中断されたならtrue
+        /// 引数1：処理毎の識別トークン。ResolveAsyncの戻り値
+        /// 引数2：読み込まれた全てのデータ
+        /// 引数3：処理が中断されて終了したならtrue
         /// </summary>
-        public event Action<string, bool> Completed;
+        public event Action<ResolveToken, IEnumerable<T>, bool> Completed;
 
         /// <summary>
-        /// 最新の情報を取得
+        /// 最新の情報を同期的に取得
         /// </summary>
-        public void Resolve()
+        public IEnumerable<T> Resolve()
         {
-            var peerNameRecords = peerNameResolver.Resolve(peerName);
-
-            foreach (PeerNameRecord peerNameRecord in peerNameRecords)
-            {
-                ReadRecord(peerNameRecord);
-            }
-            CheckDeleted(peerNameRecords);
+            return GetDatas(peerNameResolver.Resolve(peerName, cloud));
         }
 
         /// <summary>
         /// 最新の情報を非同期で取得
         /// </summary>
-        /// <returns>処理毎の識別ID</returns>
-        public string ResolveAsync()
+        /// <returns>処理毎の識別トークン</returns>
+        public ResolveToken ResolveAsync()
         {
-            string id = Guid.NewGuid().ToString();
-            peerNameResolver.ResolveAsync(peerName, id);
-            return id;
+            var token = new ResolveToken();
+            peerNameResolver.ResolveAsync(peerName, cloud, token.ID);
+            return token;
         }
 
         /// <summary>
         /// 非同期取得の取り消し
         /// </summary>
-        /// <param name="id">処理毎の識別ID(ResolveAsyncの戻り値)</param>
-        public void ResolveAsyncCancel(string id)
+        /// <param name="token">処理毎の識別トークン。ResolveAsyncの戻り値</param>
+        public void ResolveAsyncCancel(ResolveToken token)
         {
-            peerNameResolver.ResolveAsyncCancel(id);
-        }
-
-        /// <summary>
-        /// 項目の情報を取得
-        /// </summary>
-        /// <param name="id">項目のID</param>
-        /// <returns>情報。無ければnullを返す</returns>
-        public T GetItemData(string id)
-        {
-            lock (items)
-            {
-                return items.ContainsKey(id)
-                    ? items[id]
-                    : null;
-            }
-        }
-
-        /// <summary>
-        /// 現在保持している項目全てのIDを取得
-        /// </summary>
-        /// <returns>項目ID群</returns>
-        public List<string> GetIDs()
-        {
-            lock (items)
-            {
-                return items.Keys.Cast<string>().ToList();
-            }
+            peerNameResolver.ResolveAsyncCancel(token.ID);
         }
 
         private void Pnr_ResolveProgressChanged(object sender, ResolveProgressChangedEventArgs e)
         {
-            ProgressChanged?.Invoke(e.UserState as string, e.ProgressPercentage);
-
-            ReadRecord(e.PeerNameRecord);
+            ProgressChanged?.Invoke(new ResolveToken(e.UserState), e.ProgressPercentage, GetData(e.PeerNameRecord));
         }
 
         private void Pnr_ResolveCompleted(object sender, ResolveCompletedEventArgs e)
         {
-            if (!e.Cancelled)
-            {
-                CheckDeleted(e.PeerNameRecordCollection);
-            }
-            Completed?.Invoke(e.UserState as string, e.Cancelled);
-        }
-
-        static string GetUserID(PeerNameRecord peerNameRecord)
-        {
-            return peerNameRecord.Comment;
+            Completed?.Invoke(new ResolveToken(e.UserState), GetDatas(e.PeerNameRecordCollection), e.Cancelled);
         }
 
         static T GetData(PeerNameRecord peerNameRecord)
@@ -147,62 +86,18 @@ namespace DemoP2P
             return Serializer.Deserialize<T>(peerNameRecord.Data);
         }
 
-        void ReadRecord(PeerNameRecord peerNameRecord)
+        static IEnumerable<T> GetDatas(PeerNameRecordCollection peerNameRecords)
         {
-            string id = GetUserID(peerNameRecord);
-            var loadData = GetData(peerNameRecord);
-
-            var existItem = GetItemData(id);
-            if (existItem == null)
-            {
-                OnAddNode(id, loadData);
-            }
-            else
-            {
-                if (existItem.Equals(loadData)) return;
-                OnUpdateNodeData(id, loadData);
-            }
+            return peerNameRecords.Select(record => GetData(record));
         }
 
-        private void CheckDeleted(PeerNameRecordCollection peerNameRecords)
+        private void Setup()
         {
-            var existIDs = peerNameRecords.Select(pnr => GetUserID(pnr)).ToList();
-            var deletedIDs = GetIDs().Where(id => !existIDs.Contains(id));
-            foreach (string id in deletedIDs)
-            {
-                OnDeleteNode(id);
-            }
-        }
+            Dispose();
 
-        private void OnAddNode(string id, T data)
-        {
-            lock (items)
-            {
-                items.Add(id, data);
-            }
-            AddNode?.Invoke(id);
-        }
-
-        private void OnUpdateNodeData(string id, T data)
-        {
-            lock (items)
-            {
-                items[id] = data;
-            }
-            UpdateNodeData?.Invoke(id);
-        }
-
-        private void OnDeleteNode(string id)
-        {
-            var item = GetItemData(id);
-            if (item != null)
-            {
-                lock (items)
-                {
-                    items.Remove(id);
-                }
-            }
-            DeleteNode?.Invoke(id, item);
+            peerNameResolver = new PeerNameResolver();
+            peerNameResolver.ResolveProgressChanged += Pnr_ResolveProgressChanged;
+            peerNameResolver.ResolveCompleted += Pnr_ResolveCompleted;
         }
 
         /// <summary>
@@ -210,13 +105,11 @@ namespace DemoP2P
         /// </summary>
         public void Dispose()
         {
-            if (null != peerNameResolver)
-            {
-                peerNameResolver.ResolveProgressChanged -= Pnr_ResolveProgressChanged;
-                peerNameResolver.ResolveCompleted -= Pnr_ResolveCompleted;
-                peerNameResolver = null;
-            }
-            peerName = null;
+            if (null == peerNameResolver) return;
+
+            peerNameResolver.ResolveProgressChanged -= Pnr_ResolveProgressChanged;
+            peerNameResolver.ResolveCompleted -= Pnr_ResolveCompleted;
+            peerNameResolver = null;
         }
     }
 }
