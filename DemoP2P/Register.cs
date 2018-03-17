@@ -41,10 +41,10 @@ namespace DemoP2P
         }
 
         /// <summary>
-        /// データをセット
+        /// データを登録
         /// </summary>
         /// <param name="data">データ</param>
-        public void SetData(T data)
+        public void RegistData(T data)
         {
             if (data == null) throw new ArgumentNullException("data");
             if (oldData != null && oldData.Equals(data)) return;

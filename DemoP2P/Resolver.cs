@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.PeerToPeer;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DemoP2P
 {
@@ -21,35 +19,32 @@ namespace DemoP2P
         {
             this.peerName = peerName;
 
-            peerNameResolver = new PeerNameResolver();
-            peerNameResolver.ResolveProgressChanged += pnr_ResolveProgressChanged;
-            peerNameResolver.ResolveCompleted += pnr_ResolveCompleted;
-
-            items = new Dictionary<string, T>();
+            peerNameResolver.ResolveProgressChanged += Pnr_ResolveProgressChanged;
+            peerNameResolver.ResolveCompleted += Pnr_ResolveCompleted;
         }
 
-        PeerName peerName;
-        PeerNameResolver peerNameResolver;
-        Dictionary<string, T> items;
+        private PeerName peerName;
+        private PeerNameResolver peerNameResolver = new PeerNameResolver();
+        private Dictionary<string, T> items = new Dictionary<string, T>();
 
         /// <summary>
-        /// 新しい項目が追加された時のイベント
+        /// 新しいノードが追加された時のイベント
         /// 引数：追加された項目のID
         /// </summary>
-        public event Action<string> AddItem;
+        public event Action<string> AddNode;
 
         /// <summary>
-        /// 項目が更新された時のイベント
+        /// ノードが持つデータが更新された時のイベント
         /// 引数：更新された項目のID
         /// </summary>
-        public event Action<string> UpdatedItem;
+        public event Action<string> UpdateNodeData;
 
         /// <summary>
-        /// 項目が削除された時のイベント
+        /// ノードが削除された時のイベント
         /// 引数1：削除された項目のID
         /// 引数2：削除された項目
         /// </summary>
-        public event Action<string, T> DeletedItem;
+        public event Action<string, T> DeleteNode;
 
         /// <summary>
         /// ResolveAsync処理の進捗イベント
@@ -94,7 +89,7 @@ namespace DemoP2P
         /// 非同期取得の取り消し
         /// </summary>
         /// <param name="id">処理毎の識別ID(ResolveAsyncの戻り値)</param>
-        public void ResolveAsync(string id)
+        public void ResolveAsyncCancel(string id)
         {
             peerNameResolver.ResolveAsyncCancel(id);
         }
@@ -104,7 +99,7 @@ namespace DemoP2P
         /// </summary>
         /// <param name="id">項目のID</param>
         /// <returns>情報。無ければnullを返す</returns>
-        public T GetItem(string id)
+        public T GetItemData(string id)
         {
             lock (items)
             {
@@ -126,20 +121,20 @@ namespace DemoP2P
             }
         }
 
-        void pnr_ResolveProgressChanged(object sender, ResolveProgressChangedEventArgs e)
+        private void Pnr_ResolveProgressChanged(object sender, ResolveProgressChangedEventArgs e)
         {
-            if (ProgressChanged != null) ProgressChanged(e.UserState as string, e.ProgressPercentage);
+            ProgressChanged?.Invoke(e.UserState as string, e.ProgressPercentage);
 
             ReadRecord(e.PeerNameRecord);
         }
 
-        void pnr_ResolveCompleted(object sender, ResolveCompletedEventArgs e)
+        private void Pnr_ResolveCompleted(object sender, ResolveCompletedEventArgs e)
         {
             if (!e.Cancelled)
             {
                 CheckDeleted(e.PeerNameRecordCollection);
             }
-            if (Completed != null) Completed(e.UserState as string, e.Cancelled);
+            Completed?.Invoke(e.UserState as string, e.Cancelled);
         }
 
         static string GetUserID(PeerNameRecord peerNameRecord)
@@ -157,15 +152,15 @@ namespace DemoP2P
             string id = GetUserID(peerNameRecord);
             var loadData = GetData(peerNameRecord);
 
-            var existItem = GetItem(id);
+            var existItem = GetItemData(id);
             if (existItem == null)
             {
-                ExecuteAddItem(id, loadData);
+                OnAddNode(id, loadData);
             }
             else
             {
                 if (existItem.Equals(loadData)) return;
-                ExecuteUpdateItem(id, loadData);
+                OnUpdateNodeData(id, loadData);
             }
         }
 
@@ -175,31 +170,31 @@ namespace DemoP2P
             var deletedIDs = GetIDs().Where(id => !existIDs.Contains(id));
             foreach (string id in deletedIDs)
             {
-                ExecuteDeleteItem(id);
+                OnDeleteNode(id);
             }
         }
 
-        private void ExecuteAddItem(string id, T data)
+        private void OnAddNode(string id, T data)
         {
             lock (items)
             {
                 items.Add(id, data);
             }
-            if (AddItem != null) AddItem(id);
+            AddNode?.Invoke(id);
         }
 
-        private void ExecuteUpdateItem(string id, T data)
+        private void OnUpdateNodeData(string id, T data)
         {
             lock (items)
             {
                 items[id] = data;
             }
-            if (UpdatedItem != null) UpdatedItem(id);
+            UpdateNodeData?.Invoke(id);
         }
 
-        private void ExecuteDeleteItem(string id)
+        private void OnDeleteNode(string id)
         {
-            var item = GetItem(id);
+            var item = GetItemData(id);
             if (item != null)
             {
                 lock (items)
@@ -207,7 +202,7 @@ namespace DemoP2P
                     items.Remove(id);
                 }
             }
-            if (DeletedItem != null) DeletedItem(id, item);
+            DeleteNode?.Invoke(id, item);
         }
 
         /// <summary>
@@ -215,9 +210,12 @@ namespace DemoP2P
         /// </summary>
         public void Dispose()
         {
-            peerNameResolver.ResolveProgressChanged -= pnr_ResolveProgressChanged;
-            peerNameResolver.ResolveCompleted -= pnr_ResolveCompleted;
-            peerNameResolver = null;
+            if (null != peerNameResolver)
+            {
+                peerNameResolver.ResolveProgressChanged -= Pnr_ResolveProgressChanged;
+                peerNameResolver.ResolveCompleted -= Pnr_ResolveCompleted;
+                peerNameResolver = null;
+            }
             peerName = null;
         }
     }
