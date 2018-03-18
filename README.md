@@ -18,14 +18,23 @@ P2P on .Net Framework
 - Visual Studio 2012(for Windows Desktopも可)→Visual Studio 2017でのビルドと動作も確認した。
 - .Net Framework 4.5以降
   - APIの提供バージョン
-- 一つのノードが持つデータは4096バイト
-  - [PeerNameRecord.Data Property](https://docs.microsoft.com/ja-jp/dotnet/api/system.net.peertopeer.peernamerecord.data)
-  - [PeerNameRecord.Comment Property](https://docs.microsoft.com/ja-jp/dotnet/api/system.net.peertopeer.peernamerecord.comment)も使えそうに見えたが「PeerNameオブジェクトに関する」とあるので、ノード毎では無さそう。
-- ノードはデータを持たずにResolverだけ起動しておいても良いようだ。
 - 動作確認
   - ローカルネットワーク内のマシン2台でそれぞれ起動はOK。
   - 1マシン内で複数起動はOK。
   - グローバルのテストは行っていない。
+
+## API調査
+
+- 一つのノードが持つデータは4096バイト
+  - [PeerNameRecord.Data Property](https://docs.microsoft.com/ja-jp/dotnet/api/system.net.peertopeer.peernamerecord.data)
+  - [PeerNameRecord.Comment Property](https://docs.microsoft.com/ja-jp/dotnet/api/system.net.peertopeer.peernamerecord.comment)も使えそうに見えたが「PeerNameオブジェクトに関する」とあるので、ノード毎では無さそう。
+- データを登録せずResolverだけ起動しておいても良いようだ。
+- 受信データPeerNameRecordが持つEndPointCollectionプロパティには、データ元のアドレスが設定されている。
+  - 自分の環境ではIPv4とIPv6の2項目。
+  - このアドレスを使えば直接やり取り出来る。
+    - ノードに持たせたいデータが制限を超えてもなんとか出来る。
+      - もしくは、初めから制御用のデータのみにした方が良いと考えられる。
+  - NAT超えの話があるのでIPv6を使いたいところだが、普及率がまだまだ。
 
 ## 課題
 

@@ -174,13 +174,13 @@ namespace DemoP2P
             }
         }
 
-        private void Resolver_ProgressChanged(LibP2P.ResolveToken token, int progressPercentage, UserData userData)
+        private void Resolver_ProgressChanged(LibP2P.ResolveToken token, int progressPercentage, UserData userData, System.Net.IPEndPointCollection iPEndPointCollection )
         {
             SetUserData(userData);
             AddLog(nameof(Resolver_ProgressChanged) + $"({progressPercentage})", token, userData.ToString());
         }
 
-        private void Resolver_Completed(LibP2P.ResolveToken token, IEnumerable<UserData> userDatas, bool cancelled)
+        private void Resolver_Completed(LibP2P.ResolveToken token, IEnumerable<(UserData, System.Net.IPEndPointCollection)> userDatas, bool cancelled)
         {
             AddLog(nameof(Resolver_Completed), token, cancelled ? "Cancelled" : userDatas.Count().ToString() + "項目");
 
@@ -390,12 +390,12 @@ namespace DemoP2P
             }
         }
 
-        private void CheckDeleted(IEnumerable<UserData> userDatas)
+        private void CheckDeleted(IEnumerable<(UserData, System.Net.IPEndPointCollection)> userDatas)
         {
             listViewOtherUser.BeginUpdate();
             try
             {
-                var existIDs = userDatas.Select(userData => userData.ID).ToList();
+                var existIDs = userDatas.Select(userData => userData.Item1.ID).ToList();
                 listViewOtherUser.Items.Cast<ListViewItem>()
                     .Where(item => !existIDs.Contains(item.Name))
                     .ToList()

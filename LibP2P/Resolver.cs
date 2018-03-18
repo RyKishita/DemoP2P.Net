@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.PeerToPeer;
 
 namespace LibP2P
@@ -31,16 +32,17 @@ namespace LibP2P
         /// 引数1：処理毎の識別トークン。ResolveAsyncの戻り値
         /// 引数2：処理の進捗%
         /// 引数3：読み込まれたデータ
+        /// 引数4：データの送信元アドレス
         /// </summary>
-        public event Action<ResolveToken, int, T> ProgressChanged;
+        public event Action<ResolveToken, int, T, IPEndPointCollection> ProgressChanged;
 
         /// <summary>
         /// ResolveAsync処理の完了、または取り消し後のイベント
         /// 引数1：処理毎の識別トークン。ResolveAsyncの戻り値
-        /// 引数2：読み込まれた全てのデータ
+        /// 引数2：読み込まれたデータとその送信元アドレス
         /// 引数3：処理が中断されて終了したならtrue
         /// </summary>
-        public event Action<ResolveToken, IEnumerable<T>, bool> Completed;
+        public event Action<ResolveToken, IEnumerable<(T, IPEndPointCollection)>, bool> Completed;
 
         /// <summary>
         /// ResolveAsync処理で例外が起きたら呼ばれるイベント
@@ -52,7 +54,7 @@ namespace LibP2P
         /// <summary>
         /// 最新の情報を同期的に取得
         /// </summary>
-        public IEnumerable<T> Resolve()
+        public IEnumerable<(T, IPEndPointCollection)> Resolve()
         {
             if (null == peerNameResolver) throw new ObjectDisposedException(nameof(Resolver<T>));
 
@@ -103,7 +105,7 @@ namespace LibP2P
 
         private void Pnr_ResolveProgressChanged(object sender, ResolveProgressChangedEventArgs e)
         {
-            ProgressChanged?.Invoke(e.UserState as ResolveToken, e.ProgressPercentage, GetData(e.PeerNameRecord));
+            ProgressChanged?.Invoke(e.UserState as ResolveToken, e.ProgressPercentage, GetData(e.PeerNameRecord), e.PeerNameRecord.EndPointCollection);
         }
 
         private void Pnr_ResolveCompleted(object sender, ResolveCompletedEventArgs e)
@@ -123,9 +125,9 @@ namespace LibP2P
             return Serializer.Deserialize<T>(peerNameRecord.Data);
         }
 
-        private static IEnumerable<T> GetDatas(PeerNameRecordCollection peerNameRecords)
+        private static IEnumerable<(T,IPEndPointCollection)> GetDatas(PeerNameRecordCollection peerNameRecords)
         {
-            return peerNameRecords.Select(record => GetData(record));
+            return peerNameRecords.Select(record => (GetData(record), record.EndPointCollection));
         }
 
         #endregion
