@@ -17,7 +17,9 @@ namespace LibP2P
         /// <param name="portNo">ポート</param>
         public Register(Cloud cloud, PeerName peerName, int portNo)
         {
-            peerNameRegistration = new PeerNameRegistration(peerName, portNo) { Cloud = cloud };
+            this.cloud = cloud;
+            this.peerName = peerName;
+            this.portNo = portNo;
         }
 
         /// <summary>
@@ -27,6 +29,11 @@ namespace LibP2P
         public void RegistData(T data)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
+
+            if (null == peerNameRegistration)
+            {
+                peerNameRegistration = new PeerNameRegistration(peerName, portNo, cloud);
+            }
 
             peerNameRegistration.Data = Serializer.Serialize(data);
             if (peerNameRegistration.IsRegistered())
@@ -46,12 +53,15 @@ namespace LibP2P
         {
             if (null == peerNameRegistration) return;
 
-            peerNameRegistration.Stop();
+            peerNameRegistration.Dispose();
             peerNameRegistration = null;
         }
 
         #region private
 
+        private Cloud cloud = null;
+        private PeerName peerName = null;
+        private int portNo = 0;
         private PeerNameRegistration peerNameRegistration;
 
         #endregion
