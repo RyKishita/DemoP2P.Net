@@ -1,18 +1,21 @@
 ﻿using System;
 
-namespace DemoP2P
+namespace LibP2P
 {
     /// <summary>
-    /// 一回の処理を識別するためのトークン
+    /// 非同期の受信一回分の処理を識別するためのトークン
     /// ※ ネットワークには渡らない。自身の処理でのみ使用される。
     /// </summary>
-    class ResolveToken
+    public class ResolveToken
     {
         public ResolveToken()
         {
 
         }
 
+        /// <summary>
+        /// 区別するために付けているだけで、P2Pの仕組み上必要なものではない
+        /// </summary>
         public string ID { get; private set; } = Guid.NewGuid().ToString();
 
         public override string ToString()

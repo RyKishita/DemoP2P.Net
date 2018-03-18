@@ -11,13 +11,13 @@ namespace DemoP2P
         }
 
         public string ID { get; set; } = Guid.NewGuid().ToString();
-        public string DisplayName { get; set; }
+        public string UserName { get; set; }
         public bool Flag1 { get; set; }
         public bool Flag2 { get; set; }
 
         public override string ToString()
         {
-            return $"{nameof(DisplayName)}={DisplayName},{nameof(Flag1)}={Flag1},{nameof(Flag2)}={Flag2}";
+            return $"{nameof(UserName)}={UserName},{nameof(Flag1)}={Flag1},{nameof(Flag2)}={Flag2}";
         }
 
         public override int GetHashCode()

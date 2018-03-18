@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.PeerToPeer;
 
-namespace DemoP2P
+namespace LibP2P
 {
     /// <summary>
-    /// PeerNameResolverラッパー
+    /// 受信処理クラス
     /// </summary>
     /// <typeparam name="T">処理対象データ</typeparam>
-    class Resolver<T> : IDisposable where T : class
+    public class Resolver<T> : IDisposable where T : class
     {
         /// <summary>
         /// コンストラクタ
@@ -20,12 +20,11 @@ namespace DemoP2P
         {
             this.cloud = cloud;
             this.peerName = peerName;
-            Setup();
-        }
 
-        private Cloud cloud;
-        private PeerName peerName;
-        private PeerNameResolver peerNameResolver = null;
+            peerNameResolver = new PeerNameResolver();
+            peerNameResolver.ResolveProgressChanged += Pnr_ResolveProgressChanged;
+            peerNameResolver.ResolveCompleted += Pnr_ResolveCompleted;
+        }
 
         /// <summary>
         /// ResolveAsync処理の進捗イベント
@@ -44,10 +43,19 @@ namespace DemoP2P
         public event Action<ResolveToken, IEnumerable<T>, bool> Completed;
 
         /// <summary>
+        /// ResolveAsync処理で例外が起きたら呼ばれるイベント
+        /// 引数1：処理毎の識別トークン。ResolveAsyncの戻り値
+        /// 引数2：例外
+        /// </summary>
+        public event Action<ResolveToken, Exception> CompletedException;
+
+        /// <summary>
         /// 最新の情報を同期的に取得
         /// </summary>
         public IEnumerable<T> Resolve()
         {
+            if (null == peerNameResolver) throw new ObjectDisposedException(nameof(Resolver<T>));
+
             return GetDatas(peerNameResolver.Resolve(peerName, cloud));
         }
 
@@ -57,6 +65,8 @@ namespace DemoP2P
         /// <returns>処理毎の識別トークン</returns>
         public ResolveToken ResolveAsync()
         {
+            if (null == peerNameResolver) throw new ObjectDisposedException(nameof(Resolver<T>));
+
             var token = new ResolveToken();
             peerNameResolver.ResolveAsync(peerName, cloud, token);
             return token;
@@ -68,36 +78,9 @@ namespace DemoP2P
         /// <param name="token">処理毎の識別トークン。ResolveAsyncの戻り値</param>
         public void ResolveAsyncCancel(ResolveToken token)
         {
+            if (null == peerNameResolver) throw new ObjectDisposedException(nameof(Resolver<T>));
+
             peerNameResolver.ResolveAsyncCancel(token);
-        }
-
-        private void Pnr_ResolveProgressChanged(object sender, ResolveProgressChangedEventArgs e)
-        {
-            ProgressChanged?.Invoke(e.UserState as ResolveToken, e.ProgressPercentage, GetData(e.PeerNameRecord));
-        }
-
-        private void Pnr_ResolveCompleted(object sender, ResolveCompletedEventArgs e)
-        {
-            Completed?.Invoke(e.UserState as ResolveToken, GetDatas(e.PeerNameRecordCollection), e.Cancelled);
-        }
-
-        static T GetData(PeerNameRecord peerNameRecord)
-        {
-            return Serializer.Deserialize<T>(peerNameRecord.Data);
-        }
-
-        static IEnumerable<T> GetDatas(PeerNameRecordCollection peerNameRecords)
-        {
-            return peerNameRecords.Select(record => GetData(record));
-        }
-
-        private void Setup()
-        {
-            Dispose();
-
-            peerNameResolver = new PeerNameResolver();
-            peerNameResolver.ResolveProgressChanged += Pnr_ResolveProgressChanged;
-            peerNameResolver.ResolveCompleted += Pnr_ResolveCompleted;
         }
 
         /// <summary>
@@ -111,5 +94,40 @@ namespace DemoP2P
             peerNameResolver.ResolveCompleted -= Pnr_ResolveCompleted;
             peerNameResolver = null;
         }
+
+        #region private
+
+        private Cloud cloud;
+        private PeerName peerName;
+        private PeerNameResolver peerNameResolver;
+
+        private void Pnr_ResolveProgressChanged(object sender, ResolveProgressChangedEventArgs e)
+        {
+            ProgressChanged?.Invoke(e.UserState as ResolveToken, e.ProgressPercentage, GetData(e.PeerNameRecord));
+        }
+
+        private void Pnr_ResolveCompleted(object sender, ResolveCompletedEventArgs e)
+        {
+            var token = e.UserState as ResolveToken;
+
+            if (null != e.Error)
+            {
+                CompletedException?.Invoke(token, e.Error);
+            }
+
+            Completed?.Invoke(token, GetDatas(e.PeerNameRecordCollection), e.Cancelled);
+        }
+
+        private static T GetData(PeerNameRecord peerNameRecord)
+        {
+            return Serializer.Deserialize<T>(peerNameRecord.Data);
+        }
+
+        private static IEnumerable<T> GetDatas(PeerNameRecordCollection peerNameRecords)
+        {
+            return peerNameRecords.Select(record => GetData(record));
+        }
+
+        #endregion
     }
 }

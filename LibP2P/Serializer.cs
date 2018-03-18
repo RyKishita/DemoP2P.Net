@@ -2,11 +2,14 @@
 using System.IO;
 using System.IO.Compression;
 
-namespace DemoP2P
+namespace LibP2P
 {
+    /// <summary>
+    /// 製品版では暗号化する必要があるだろうが割愛
+    /// </summary>
     class Serializer
     {
-        public static byte[] Serialize<T>(T data) where T:class
+        public static byte[] Serialize<T>(T data) where T : class
         {
             using (var ms = new MemoryStream())
             {
@@ -19,7 +22,7 @@ namespace DemoP2P
             }
         }
 
-        public static T Deserialize<T>(byte[] data) where T:class
+        public static T Deserialize<T>(byte[] data) where T : class
         {
             using (var ms = new MemoryStream(data))
             {

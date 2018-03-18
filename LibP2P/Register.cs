@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Net.PeerToPeer;
 
-namespace DemoP2P
+namespace LibP2P
 {
     /// <summary>
-    /// PeerNameRegistrationラッパー
+    /// 送信処理クラス
     /// </summary>
     /// <typeparam name="T">処理対象データ</typeparam>
-    class Register<T> : IDisposable where T : class
+    public class Register<T> : IDisposable where T : class
     {
         /// <summary>
         /// コンストラクタ
@@ -19,8 +19,6 @@ namespace DemoP2P
         {
             peerNameRegistration = new PeerNameRegistration(peerName, portNo) { Cloud = cloud };
         }
-
-        private PeerNameRegistration peerNameRegistration;
 
         /// <summary>
         /// データを登録
@@ -47,8 +45,15 @@ namespace DemoP2P
         public void Dispose()
         {
             if (null == peerNameRegistration) return;
+
             peerNameRegistration.Stop();
             peerNameRegistration = null;
         }
+
+        #region private
+
+        private PeerNameRegistration peerNameRegistration;
+
+        #endregion
     }
 }
