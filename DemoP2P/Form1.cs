@@ -174,10 +174,10 @@ namespace DemoP2P
             }
         }
 
-        private void Resolver_ProgressChanged(LibP2P.ResolveToken token, int progressPercentage, UserData userData, System.Net.IPEndPointCollection iPEndPointCollection )
+        private void Resolver_ProgressChanged(LibP2P.ResolveToken token, int progressPercentage, (UserData, System.Net.IPEndPointCollection) userData)
         {
-            SetUserData(userData);
-            AddLog(nameof(Resolver_ProgressChanged) + $"({progressPercentage})", token, userData.ToString());
+            SetUserData(userData.Item1);
+            AddLog(nameof(Resolver_ProgressChanged) + $"({progressPercentage})", token, userData.Item1.ToString());
         }
 
         private void Resolver_Completed(LibP2P.ResolveToken token, IEnumerable<(UserData, System.Net.IPEndPointCollection)> userDatas, bool cancelled)

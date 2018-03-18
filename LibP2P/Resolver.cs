@@ -31,10 +31,9 @@ namespace LibP2P
         /// ResolveAsync処理の進捗イベント
         /// 引数1：処理毎の識別トークン。ResolveAsyncの戻り値
         /// 引数2：処理の進捗%
-        /// 引数3：読み込まれたデータ
-        /// 引数4：データの送信元アドレス
+        /// 引数3：読み込まれたデータとその送信元アドレス
         /// </summary>
-        public event Action<ResolveToken, int, T, IPEndPointCollection> ProgressChanged;
+        public event Action<ResolveToken, int, (T, IPEndPointCollection)> ProgressChanged;
 
         /// <summary>
         /// ResolveAsync処理の完了、または取り消し後のイベント
@@ -105,7 +104,7 @@ namespace LibP2P
 
         private void Pnr_ResolveProgressChanged(object sender, ResolveProgressChangedEventArgs e)
         {
-            ProgressChanged?.Invoke(e.UserState as ResolveToken, e.ProgressPercentage, GetData(e.PeerNameRecord), e.PeerNameRecord.EndPointCollection);
+            ProgressChanged?.Invoke(e.UserState as ResolveToken, e.ProgressPercentage, GetData(e.PeerNameRecord));
         }
 
         private void Pnr_ResolveCompleted(object sender, ResolveCompletedEventArgs e)
@@ -120,14 +119,14 @@ namespace LibP2P
             Completed?.Invoke(token, GetDatas(e.PeerNameRecordCollection), e.Cancelled);
         }
 
-        private static T GetData(PeerNameRecord peerNameRecord)
+        private static (T, IPEndPointCollection) GetData(PeerNameRecord peerNameRecord)
         {
-            return Serializer.Deserialize<T>(peerNameRecord.Data);
+            return (Serializer.Deserialize<T>(peerNameRecord.Data), peerNameRecord.EndPointCollection);
         }
 
         private static IEnumerable<(T,IPEndPointCollection)> GetDatas(PeerNameRecordCollection peerNameRecords)
         {
-            return peerNameRecords.Select(record => (GetData(record), record.EndPointCollection));
+            return peerNameRecords.Select(record => GetData(record));
         }
 
         #endregion
