@@ -41,7 +41,6 @@
             this.panelNetwork = new System.Windows.Forms.Panel();
             this.radioButtonGlobal = new System.Windows.Forms.RadioButton();
             this.radioButtonAllLinkLocal = new System.Windows.Forms.RadioButton();
-            this.radioButtonAvailable = new System.Windows.Forms.RadioButton();
             this.buttonStartOrStop = new System.Windows.Forms.Button();
             this.listViewLog = new System.Windows.Forms.ListView();
             this.columnHeaderLogDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -53,8 +52,8 @@
             this.labelIntervalUnit = new System.Windows.Forms.Label();
             this.checkBoxAutoLoad = new System.Windows.Forms.CheckBox();
             this.buttonLoad = new System.Windows.Forms.Button();
-            this.labelIndexServerAddress = new System.Windows.Forms.Label();
-            this.textBoxIndexServerAddress = new System.Windows.Forms.TextBox();
+            this.labelPeerHostName = new System.Windows.Forms.Label();
+            this.textBoxPeerHostName = new System.Windows.Forms.TextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageInput = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -64,6 +63,8 @@
             this.propertyGridMyData = new System.Windows.Forms.PropertyGrid();
             this.tabPageSetting = new System.Windows.Forms.TabPage();
             this.panelSetting = new System.Windows.Forms.Panel();
+            this.tabPageValidate = new System.Windows.Forms.TabPage();
+            this.buttonGetAvailableClouds = new System.Windows.Forms.Button();
             this.checkBoxAutoScroll = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panelSecured.SuspendLayout();
@@ -78,6 +79,7 @@
             this.splitContainer1.SuspendLayout();
             this.tabPageSetting.SuspendLayout();
             this.panelSetting.SuspendLayout();
+            this.tabPageValidate.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelClassifier
@@ -173,9 +175,9 @@
             this.labelNetwork.AutoSize = true;
             this.labelNetwork.Location = new System.Drawing.Point(7, 21);
             this.labelNetwork.Name = "labelNetwork";
-            this.labelNetwork.Size = new System.Drawing.Size(161, 21);
+            this.labelNetwork.Size = new System.Drawing.Size(100, 21);
             this.labelNetwork.TabIndex = 0;
-            this.labelNetwork.Text = "ネットワークの範囲";
+            this.labelNetwork.Text = "ピアメッシュ";
             // 
             // panelNetwork
             // 
@@ -183,10 +185,9 @@
             this.panelNetwork.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panelNetwork.Controls.Add(this.radioButtonGlobal);
             this.panelNetwork.Controls.Add(this.radioButtonAllLinkLocal);
-            this.panelNetwork.Controls.Add(this.radioButtonAvailable);
             this.panelNetwork.Location = new System.Drawing.Point(293, 9);
             this.panelNetwork.Name = "panelNetwork";
-            this.panelNetwork.Size = new System.Drawing.Size(350, 33);
+            this.panelNetwork.Size = new System.Drawing.Size(249, 33);
             this.panelNetwork.TabIndex = 1;
             // 
             // radioButtonGlobal
@@ -213,23 +214,12 @@
             this.radioButtonAllLinkLocal.UseVisualStyleBackColor = true;
             this.radioButtonAllLinkLocal.CheckedChanged += new System.EventHandler(this.RadioButtonNetwork_CheckedChanged);
             // 
-            // radioButtonAvailable
-            // 
-            this.radioButtonAvailable.AutoSize = true;
-            this.radioButtonAvailable.Location = new System.Drawing.Point(270, 5);
-            this.radioButtonAvailable.Name = "radioButtonAvailable";
-            this.radioButtonAvailable.Size = new System.Drawing.Size(77, 25);
-            this.radioButtonAvailable.TabIndex = 2;
-            this.radioButtonAvailable.Text = "両方";
-            this.radioButtonAvailable.UseVisualStyleBackColor = true;
-            this.radioButtonAvailable.CheckedChanged += new System.EventHandler(this.RadioButtonNetwork_CheckedChanged);
-            // 
             // buttonStartOrStop
             // 
             this.buttonStartOrStop.Location = new System.Drawing.Point(427, 3);
             this.buttonStartOrStop.Name = "buttonStartOrStop";
             this.buttonStartOrStop.Size = new System.Drawing.Size(138, 79);
-            this.buttonStartOrStop.TabIndex = 4;
+            this.buttonStartOrStop.TabIndex = 1;
             this.buttonStartOrStop.Text = "開始";
             this.buttonStartOrStop.UseVisualStyleBackColor = true;
             this.buttonStartOrStop.Click += new System.EventHandler(this.ButtonStartOrStop_Click);
@@ -251,7 +241,7 @@
             this.listViewLog.MultiSelect = false;
             this.listViewLog.Name = "listViewLog";
             this.listViewLog.Size = new System.Drawing.Size(827, 324);
-            this.listViewLog.TabIndex = 0;
+            this.listViewLog.TabIndex = 3;
             this.listViewLog.UseCompatibleStateImageBehavior = false;
             this.listViewLog.View = System.Windows.Forms.View.Details;
             // 
@@ -323,7 +313,7 @@
             this.checkBoxAutoLoad.Location = new System.Drawing.Point(314, 402);
             this.checkBoxAutoLoad.Name = "checkBoxAutoLoad";
             this.checkBoxAutoLoad.Size = new System.Drawing.Size(193, 25);
-            this.checkBoxAutoLoad.TabIndex = 2;
+            this.checkBoxAutoLoad.TabIndex = 3;
             this.checkBoxAutoLoad.Text = "読み込み完了後、";
             this.checkBoxAutoLoad.UseVisualStyleBackColor = true;
             this.checkBoxAutoLoad.CheckedChanged += new System.EventHandler(this.CheckBoxAutoLoad_CheckedChanged);
@@ -334,28 +324,28 @@
             this.buttonLoad.Location = new System.Drawing.Point(10, 394);
             this.buttonLoad.Name = "buttonLoad";
             this.buttonLoad.Size = new System.Drawing.Size(227, 40);
-            this.buttonLoad.TabIndex = 1;
+            this.buttonLoad.TabIndex = 2;
             this.buttonLoad.Text = "最新の情報に更新";
             this.buttonLoad.UseVisualStyleBackColor = true;
             this.buttonLoad.Click += new System.EventHandler(this.ButtonLoad_Click);
             // 
-            // labelIndexServerAddress
+            // labelPeerHostName
             // 
-            this.labelIndexServerAddress.AutoSize = true;
-            this.labelIndexServerAddress.Location = new System.Drawing.Point(7, 156);
-            this.labelIndexServerAddress.Name = "labelIndexServerAddress";
-            this.labelIndexServerAddress.Size = new System.Drawing.Size(233, 21);
-            this.labelIndexServerAddress.TabIndex = 6;
-            this.labelIndexServerAddress.Text = "インデックスサーバーアドレス";
+            this.labelPeerHostName.AutoSize = true;
+            this.labelPeerHostName.Location = new System.Drawing.Point(7, 156);
+            this.labelPeerHostName.Name = "labelPeerHostName";
+            this.labelPeerHostName.Size = new System.Drawing.Size(184, 21);
+            this.labelPeerHostName.TabIndex = 6;
+            this.labelPeerHostName.Text = "ピアホスト名(DNS名)";
             // 
-            // textBoxIndexServerAddress
+            // textBoxPeerHostName
             // 
-            this.textBoxIndexServerAddress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.textBoxPeerHostName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxIndexServerAddress.Location = new System.Drawing.Point(293, 150);
-            this.textBoxIndexServerAddress.Name = "textBoxIndexServerAddress";
-            this.textBoxIndexServerAddress.Size = new System.Drawing.Size(517, 28);
-            this.textBoxIndexServerAddress.TabIndex = 7;
+            this.textBoxPeerHostName.Location = new System.Drawing.Point(293, 150);
+            this.textBoxPeerHostName.Name = "textBoxPeerHostName";
+            this.textBoxPeerHostName.Size = new System.Drawing.Size(517, 28);
+            this.textBoxPeerHostName.TabIndex = 7;
             // 
             // tabControl1
             // 
@@ -363,6 +353,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPageInput);
             this.tabControl1.Controls.Add(this.tabPageSetting);
+            this.tabControl1.Controls.Add(this.tabPageValidate);
             this.tabControl1.Location = new System.Drawing.Point(12, 21);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -418,7 +409,7 @@
             this.listViewOtherUser.MultiSelect = false;
             this.listViewOtherUser.Name = "listViewOtherUser";
             this.listViewOtherUser.Size = new System.Drawing.Size(223, 211);
-            this.listViewOtherUser.TabIndex = 7;
+            this.listViewOtherUser.TabIndex = 0;
             this.listViewOtherUser.UseCompatibleStateImageBehavior = false;
             this.listViewOtherUser.View = System.Windows.Forms.View.Details;
             this.listViewOtherUser.SelectedIndexChanged += new System.EventHandler(this.ListViewOtherUser_SelectedIndexChanged);
@@ -436,7 +427,7 @@
             this.propertyGridOtherData.Name = "propertyGridOtherData";
             this.propertyGridOtherData.PropertySort = System.Windows.Forms.PropertySort.NoSort;
             this.propertyGridOtherData.Size = new System.Drawing.Size(583, 211);
-            this.propertyGridOtherData.TabIndex = 7;
+            this.propertyGridOtherData.TabIndex = 0;
             this.propertyGridOtherData.ToolbarVisible = false;
             // 
             // propertyGridMyData
@@ -446,7 +437,7 @@
             this.propertyGridMyData.Name = "propertyGridMyData";
             this.propertyGridMyData.PropertySort = System.Windows.Forms.PropertySort.NoSort;
             this.propertyGridMyData.Size = new System.Drawing.Size(404, 168);
-            this.propertyGridMyData.TabIndex = 6;
+            this.propertyGridMyData.TabIndex = 0;
             this.propertyGridMyData.ToolbarVisible = false;
             this.propertyGridMyData.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.PropertyGridMyData_PropertyValueChanged);
             // 
@@ -467,11 +458,11 @@
             this.panelSetting.Controls.Add(this.panelNetwork);
             this.panelSetting.Controls.Add(this.labelClassifier);
             this.panelSetting.Controls.Add(this.labelNetwork);
-            this.panelSetting.Controls.Add(this.textBoxIndexServerAddress);
+            this.panelSetting.Controls.Add(this.textBoxPeerHostName);
             this.panelSetting.Controls.Add(this.numericUpDownPortNo);
             this.panelSetting.Controls.Add(this.textBoxClassifier);
             this.panelSetting.Controls.Add(this.panelSecured);
-            this.panelSetting.Controls.Add(this.labelIndexServerAddress);
+            this.panelSetting.Controls.Add(this.labelPeerHostName);
             this.panelSetting.Controls.Add(this.labelPortNo);
             this.panelSetting.Controls.Add(this.labelSecured);
             this.panelSetting.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -479,6 +470,27 @@
             this.panelSetting.Name = "panelSetting";
             this.panelSetting.Size = new System.Drawing.Size(819, 427);
             this.panelSetting.TabIndex = 10;
+            // 
+            // tabPageValidate
+            // 
+            this.tabPageValidate.Controls.Add(this.buttonGetAvailableClouds);
+            this.tabPageValidate.Location = new System.Drawing.Point(4, 31);
+            this.tabPageValidate.Name = "tabPageValidate";
+            this.tabPageValidate.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageValidate.Size = new System.Drawing.Size(831, 437);
+            this.tabPageValidate.TabIndex = 2;
+            this.tabPageValidate.Text = "検証";
+            this.tabPageValidate.UseVisualStyleBackColor = true;
+            // 
+            // buttonGetAvailableClouds
+            // 
+            this.buttonGetAvailableClouds.Location = new System.Drawing.Point(10, 16);
+            this.buttonGetAvailableClouds.Name = "buttonGetAvailableClouds";
+            this.buttonGetAvailableClouds.Size = new System.Drawing.Size(236, 39);
+            this.buttonGetAvailableClouds.TabIndex = 10;
+            this.buttonGetAvailableClouds.Text = "利用可能なCloud検索";
+            this.buttonGetAvailableClouds.UseVisualStyleBackColor = true;
+            this.buttonGetAvailableClouds.Click += new System.EventHandler(this.ButtonGetAvailableClouds_Click);
             // 
             // checkBoxAutoScroll
             // 
@@ -489,7 +501,7 @@
             this.checkBoxAutoScroll.Location = new System.Drawing.Point(681, 499);
             this.checkBoxAutoScroll.Name = "checkBoxAutoScroll";
             this.checkBoxAutoScroll.Size = new System.Drawing.Size(158, 25);
-            this.checkBoxAutoScroll.TabIndex = 1;
+            this.checkBoxAutoScroll.TabIndex = 2;
             this.checkBoxAutoScroll.Text = "自動スクロール";
             this.checkBoxAutoScroll.UseVisualStyleBackColor = true;
             // 
@@ -499,7 +511,7 @@
             this.label1.Location = new System.Drawing.Point(22, 500);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(41, 21);
-            this.label1.TabIndex = 6;
+            this.label1.TabIndex = 1;
             this.label1.Text = "ログ";
             // 
             // Form1
@@ -533,6 +545,7 @@
             this.tabPageSetting.ResumeLayout(false);
             this.panelSetting.ResumeLayout(false);
             this.panelSetting.PerformLayout();
+            this.tabPageValidate.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -552,7 +565,6 @@
         private System.Windows.Forms.Panel panelNetwork;
         private System.Windows.Forms.RadioButton radioButtonGlobal;
         private System.Windows.Forms.RadioButton radioButtonAllLinkLocal;
-        private System.Windows.Forms.RadioButton radioButtonAvailable;
         private System.Windows.Forms.Button buttonStartOrStop;
         private System.Windows.Forms.ListView listViewLog;
         private System.Windows.Forms.ColumnHeader columnHeaderLogDate;
@@ -561,8 +573,8 @@
         private System.Windows.Forms.Label labelIntervalUnit;
         private System.Windows.Forms.CheckBox checkBoxAutoLoad;
         private System.Windows.Forms.Button buttonLoad;
-        private System.Windows.Forms.Label labelIndexServerAddress;
-        private System.Windows.Forms.TextBox textBoxIndexServerAddress;
+        private System.Windows.Forms.Label labelPeerHostName;
+        private System.Windows.Forms.TextBox textBoxPeerHostName;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPageInput;
         private System.Windows.Forms.TabPage tabPageSetting;
@@ -577,6 +589,8 @@
         private System.Windows.Forms.ColumnHeader columnHeaderLogMessage;
         private System.Windows.Forms.ColumnHeader columnHeaderLogActionName;
         private System.Windows.Forms.ColumnHeader columnHeaderLogToken;
+        private System.Windows.Forms.Button buttonGetAvailableClouds;
+        private System.Windows.Forms.TabPage tabPageValidate;
     }
 }
 

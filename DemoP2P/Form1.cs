@@ -16,8 +16,9 @@ namespace DemoP2P
 
         #region フィールド
 
-        PeerName peerName = null;
         Cloud cloud = null;
+        PeerName peerName = null;
+        int portNo = 0;
         LibP2P.Register<UserData> register = null;
         LibP2P.Resolver<UserData> resolver = null;
 
@@ -57,8 +58,9 @@ namespace DemoP2P
                 }
                 else
                 {
-                    peerName = GetInputPeerName();
                     cloud = GetInputCloud();
+                    peerName = GetInputPeerName();
+                    portNo = GetInputPortNo();
                     OnStart();
                 }
             }
@@ -72,17 +74,17 @@ namespace DemoP2P
         {
             if (IsTargetGrobal())
             {
-                string indexServerAddress = GetInputIndexServerAddress();
-                if (string.IsNullOrWhiteSpace(indexServerAddress))
+                string peerHostName = GetInputPeerHostName();
+                if (string.IsNullOrWhiteSpace(peerHostName))
                 {
-                    MessageBox.Show(labelIndexServerAddress.Text + "を入力してください。", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(labelPeerHostName.Text + "を入力してください。", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     tabControl1.SelectedTab = tabPageSetting;
-                    textBoxIndexServerAddress.SelectAll();
-                    textBoxIndexServerAddress.Focus();
+                    textBoxPeerHostName.SelectAll();
+                    textBoxPeerHostName.Focus();
                     return null;
                 }
 
-                return PeerName.CreateFromPeerHostName(indexServerAddress);
+                return PeerName.CreateFromPeerHostName(peerHostName);
             }
             else
             {
@@ -103,6 +105,9 @@ namespace DemoP2P
         private void OnStart()
         {
             if (null == peerName || null == cloud) return;
+
+            AddLog(nameof(OnStart), null, peerName.ToString());
+            AddLog(nameof(OnStart), null, cloud.ToString());
 
             OpenPeer();
 
@@ -193,12 +198,22 @@ namespace DemoP2P
             AddLog(nameof(Resolver_CompletedException), token, exception.ToString());
         }
 
-        void SetLoadButton(bool bON)
+        private void ButtonGetAvailableClouds_Click(object sender, EventArgs e)
         {
-            buttonLoad.Enabled = !bON;
-            buttonLoad.Text = bON ? "読み込み中" : "最新の情報に更新";
+            var clouds = System.Net.PeerToPeer.Cloud.GetAvailableClouds();
+            if (null == clouds)
+            {
+                AddLog("GetAvailableClouds", null, "Not Found");
+            }
+            else
+            {
+                foreach (Cloud cloud in clouds)
+                {
+                    AddLog("GetAvailableClouds", null, cloud.ToString());
+                }
+            }
         }
-
+        
         #endregion
 
         #region メソッド
@@ -238,8 +253,8 @@ namespace DemoP2P
             panelSecured.Enabled = !IsTargetGrobal();
             labelClassifier.Enabled = !IsTargetGrobal();
             textBoxClassifier.Enabled = !IsTargetGrobal();
-            labelIndexServerAddress.Enabled = IsTargetGrobal();
-            textBoxIndexServerAddress.Enabled = IsTargetGrobal();
+            labelPeerHostName.Enabled = IsTargetGrobal();
+            textBoxPeerHostName.Enabled = IsTargetGrobal();
 
             #endregion
 
@@ -263,7 +278,7 @@ namespace DemoP2P
         {
             DestroyRegister();
 
-            register = new LibP2P.Register<UserData>(GetInputCloud(), peerName, GetInputPortNo());
+            register = new LibP2P.Register<UserData>(cloud, peerName, portNo);
             register.RegistData(MyData);
         }
 
@@ -304,7 +319,7 @@ namespace DemoP2P
             try
             {
                 var item = listViewLog.Items.Add(DateTime.Now.ToLongTimeString());
-                item.SubItems.Add(null == token? "": token.ToString());
+                item.SubItems.Add(null == token ? "" : token.ToString());
                 item.SubItems.Add(actionName);
                 item.SubItems.Add(message);
                 if (checkBoxAutoScroll.Checked)
@@ -320,9 +335,9 @@ namespace DemoP2P
 
         private string GetInputClassifier() => textBoxClassifier.Text.Trim();
 
-        private string GetInputIndexServerAddress() => textBoxIndexServerAddress.Text.Trim();
+        private string GetInputPeerHostName() => textBoxPeerHostName.Text.Trim();
 
-        private bool IsPeerOpened() => register != null;
+        private bool IsPeerOpened() => resolver != null;
 
         private PeerNameType GetSelectedPeerNameType()
         {
@@ -337,11 +352,10 @@ namespace DemoP2P
         {
             if (radioButtonGlobal.Checked) return Cloud.Global;
             if (radioButtonAllLinkLocal.Checked) return Cloud.AllLinkLocal;
-            if (radioButtonAvailable.Checked) return Cloud.Available;
             throw new NotImplementedException();
         }
 
-        private bool IsTargetGrobal() => radioButtonGlobal.Checked || radioButtonAvailable.Checked;
+        private bool IsTargetGrobal() => radioButtonGlobal.Checked;
 
         private UserData GetSelectedOtherData()
         {
@@ -391,6 +405,12 @@ namespace DemoP2P
             {
                 listViewOtherUser.EndUpdate();
             }
+        }
+
+        void SetLoadButton(bool bON)
+        {
+            buttonLoad.Enabled = !bON;
+            buttonLoad.Text = bON ? "読み込み中" : "最新の情報に更新";
         }
 
         #endregion

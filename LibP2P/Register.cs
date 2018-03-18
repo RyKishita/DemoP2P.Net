@@ -59,10 +59,10 @@ namespace LibP2P
 
         #region private
 
-        private Cloud cloud = null;
-        private PeerName peerName = null;
-        private int portNo = 0;
-        private PeerNameRegistration peerNameRegistration;
+        private Cloud cloud;
+        private PeerName peerName;
+        private int portNo;
+        private PeerNameRegistration peerNameRegistration = null;
 
         #endregion
     }
