@@ -25,9 +25,10 @@ P2P on .Net Framework
 
 ## API調査
 
-- 一つのノードが持つデータは4096バイト
+- 一つのノードが持てるデータは4096バイト+39文字(Unicode)
   - [PeerNameRecord.Data Property](https://docs.microsoft.com/ja-jp/dotnet/api/system.net.peertopeer.peernamerecord.data)
-  - [PeerNameRecord.Comment Property](https://docs.microsoft.com/ja-jp/dotnet/api/system.net.peertopeer.peernamerecord.comment)も使えそうに見えたが「PeerNameオブジェクトに関する」とあるので、ノード毎では無さそう。
+  - [PeerNameRecord.Comment Property](https://docs.microsoft.com/ja-jp/dotnet/api/system.net.peertopeer.peernamerecord.comment)
+    - 初期値はnullなのに、nullや空文字列を入れるとエラーになる。
 - データを登録せずResolverだけ起動しておいても良いようだ。
 - 受信データPeerNameRecordが持つEndPointCollectionプロパティには、データ元のアドレスが設定されている。
   - 自分の環境ではIPv4とIPv6の2項目。

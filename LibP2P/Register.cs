@@ -26,7 +26,8 @@ namespace LibP2P
         /// データを登録
         /// </summary>
         /// <param name="data">データ</param>
-        public void RegistData(T data)
+        /// <param name="comment">コメント</param>
+        public void RegistData(T data, string comment)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
 
@@ -36,6 +37,7 @@ namespace LibP2P
             }
 
             peerNameRegistration.Data = Serializer.Serialize(data);
+            peerNameRegistration.Comment = string.IsNullOrEmpty(comment)? " ": comment;
             if (peerNameRegistration.IsRegistered())
             {
                 peerNameRegistration.Update();

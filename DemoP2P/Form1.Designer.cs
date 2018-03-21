@@ -67,6 +67,9 @@
             this.buttonGetAvailableClouds = new System.Windows.Forms.Button();
             this.checkBoxAutoScroll = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.columnHeaderComment = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBoxComment = new System.Windows.Forms.TextBox();
             this.panelSecured.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPortNo)).BeginInit();
             this.panelNetwork.SuspendLayout();
@@ -362,6 +365,8 @@
             // 
             // tabPageInput
             // 
+            this.tabPageInput.Controls.Add(this.textBoxComment);
+            this.tabPageInput.Controls.Add(this.label2);
             this.tabPageInput.Controls.Add(this.splitContainer1);
             this.tabPageInput.Controls.Add(this.propertyGridMyData);
             this.tabPageInput.Controls.Add(this.buttonStartOrStop);
@@ -392,7 +397,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.propertyGridOtherData);
             this.splitContainer1.Size = new System.Drawing.Size(813, 211);
-            this.splitContainer1.SplitterDistance = 223;
+            this.splitContainer1.SplitterDistance = 300;
             this.splitContainer1.SplitterWidth = 7;
             this.splitContainer1.TabIndex = 8;
             // 
@@ -400,7 +405,8 @@
             // 
             this.listViewOtherUser.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.listViewOtherUser.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeaderDisplayName});
+            this.columnHeaderDisplayName,
+            this.columnHeaderComment});
             this.listViewOtherUser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewOtherUser.FullRowSelect = true;
             this.listViewOtherUser.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
@@ -408,7 +414,7 @@
             this.listViewOtherUser.Location = new System.Drawing.Point(0, 0);
             this.listViewOtherUser.MultiSelect = false;
             this.listViewOtherUser.Name = "listViewOtherUser";
-            this.listViewOtherUser.Size = new System.Drawing.Size(223, 211);
+            this.listViewOtherUser.Size = new System.Drawing.Size(300, 211);
             this.listViewOtherUser.TabIndex = 0;
             this.listViewOtherUser.UseCompatibleStateImageBehavior = false;
             this.listViewOtherUser.View = System.Windows.Forms.View.Details;
@@ -417,7 +423,7 @@
             // columnHeaderDisplayName
             // 
             this.columnHeaderDisplayName.Text = "DisplayName";
-            this.columnHeaderDisplayName.Width = 118;
+            this.columnHeaderDisplayName.Width = 150;
             // 
             // propertyGridOtherData
             // 
@@ -426,7 +432,7 @@
             this.propertyGridOtherData.Location = new System.Drawing.Point(0, 0);
             this.propertyGridOtherData.Name = "propertyGridOtherData";
             this.propertyGridOtherData.PropertySort = System.Windows.Forms.PropertySort.NoSort;
-            this.propertyGridOtherData.Size = new System.Drawing.Size(583, 211);
+            this.propertyGridOtherData.Size = new System.Drawing.Size(506, 211);
             this.propertyGridOtherData.TabIndex = 0;
             this.propertyGridOtherData.ToolbarVisible = false;
             // 
@@ -514,6 +520,28 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "ログ";
             // 
+            // columnHeaderComment
+            // 
+            this.columnHeaderComment.Text = "Comment";
+            this.columnHeaderComment.Width = 200;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(423, 140);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(94, 21);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Comment";
+            // 
+            // textBoxComment
+            // 
+            this.textBoxComment.Location = new System.Drawing.Point(575, 139);
+            this.textBoxComment.Name = "textBoxComment";
+            this.textBoxComment.Size = new System.Drawing.Size(150, 28);
+            this.textBoxComment.TabIndex = 10;
+            this.textBoxComment.TextChanged += new System.EventHandler(this.TextBoxComment_TextChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 21F);
@@ -591,6 +619,9 @@
         private System.Windows.Forms.ColumnHeader columnHeaderLogToken;
         private System.Windows.Forms.Button buttonGetAvailableClouds;
         private System.Windows.Forms.TabPage tabPageValidate;
+        private System.Windows.Forms.ColumnHeader columnHeaderComment;
+        private System.Windows.Forms.TextBox textBoxComment;
+        private System.Windows.Forms.Label label2;
     }
 }
 

@@ -70,60 +70,6 @@ namespace DemoP2P
             }
         }
 
-        private PeerName GetInputPeerName()
-        {
-            if (IsTargetGrobal())
-            {
-                string peerHostName = GetInputPeerHostName();
-                if (string.IsNullOrWhiteSpace(peerHostName))
-                {
-                    MessageBox.Show(labelPeerHostName.Text + "を入力してください。", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    tabControl1.SelectedTab = tabPageSetting;
-                    textBoxPeerHostName.SelectAll();
-                    textBoxPeerHostName.Focus();
-                    return null;
-                }
-
-                return PeerName.CreateFromPeerHostName(peerHostName);
-            }
-            else
-            {
-                string classifier = GetInputClassifier();
-                if (string.IsNullOrWhiteSpace(classifier))
-                {
-                    MessageBox.Show(labelClassifier.Text + "を入力してください。", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    tabControl1.SelectedTab = tabPageSetting;
-                    textBoxClassifier.SelectAll();
-                    textBoxClassifier.Focus();
-                    return null;
-                }
-
-                return new PeerName(classifier, GetSelectedPeerNameType());
-            }
-        }
-
-        private void OnStart()
-        {
-            if (null == peerName || null == cloud) return;
-
-            AddLog(nameof(OnStart), null, peerName.ToString());
-            AddLog(nameof(OnStart), null, cloud.ToString());
-
-            OpenPeer();
-
-            UpdateUI();
-            buttonLoad.PerformClick();
-        }
-
-        private void OnStop()
-        {
-            ClosePeer();
-
-            OtherData = null;
-            listViewOtherUser.Items.Clear();
-            UpdateUI();
-        }
-
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             ClosePeer();
@@ -169,18 +115,18 @@ namespace DemoP2P
         {
             if (IsPeerOpened())
             {
-                register.RegistData(MyData);
+                RegistData();
                 AddLog("RegistData", null, MyData.ToString());
             }
         }
 
-        private void Resolver_ProgressChanged(LibP2P.ResolveToken token, int progressPercentage, (UserData, System.Net.IPEndPointCollection) userData)
+        private void Resolver_ProgressChanged(LibP2P.ResolveToken token, int progressPercentage, LibP2P.PeerNodeData<UserData> nodeData)
         {
-            SetUserData(userData.Item1);
-            AddLog(nameof(Resolver_ProgressChanged) + $"({progressPercentage})", token, userData.Item1.ToString());
+            SetUserData(nodeData);
+            AddLog(nameof(Resolver_ProgressChanged) + $"({progressPercentage})", token, nodeData.Data.ToString());
         }
 
-        private void Resolver_Completed(LibP2P.ResolveToken token, IEnumerable<(UserData, System.Net.IPEndPointCollection)> userDatas, bool cancelled)
+        private void Resolver_Completed(LibP2P.ResolveToken token, IEnumerable<LibP2P.PeerNodeData<UserData>> userDatas, bool cancelled)
         {
             AddLog(nameof(Resolver_Completed), token, cancelled ? "Cancelled" : userDatas.Count().ToString() + "項目");
 
@@ -213,7 +159,12 @@ namespace DemoP2P
                 }
             }
         }
-        
+
+        private void TextBoxComment_TextChanged(object sender, EventArgs e)
+        {
+            RegistData();
+        }
+
         #endregion
 
         #region メソッド
@@ -242,6 +193,7 @@ namespace DemoP2P
             #region Input
 
             buttonStartOrStop.Text = IsPeerOpened() ? "停止" : "開始";
+            textBoxComment.Enabled = IsPeerOpened();
 
             #endregion
 
@@ -279,7 +231,6 @@ namespace DemoP2P
             DestroyRegister();
 
             register = new LibP2P.Register<UserData>(cloud, peerName, portNo);
-            register.RegistData(MyData);
         }
 
         private void DestroyRegister()
@@ -310,8 +261,6 @@ namespace DemoP2P
             resolver.Dispose();
             resolver = null;
         }
-
-        #region AddLog
 
         void AddLog(string actionName, LibP2P.ResolveToken token = null, string message = "")
         {
@@ -367,21 +316,22 @@ namespace DemoP2P
             return userData;
         }
 
-        private void SetUserData(UserData userData)
+        private void SetUserData(LibP2P.PeerNodeData<UserData> nodeData)
         {
             listViewOtherUser.BeginUpdate();
             try
             {
                 var listViewItems = listViewOtherUser.Items;
 
-                var item = listViewItems.Find(userData.ID, false).FirstOrDefault() ?? listViewItems.Add("");
-                item.Text = string.IsNullOrWhiteSpace(userData.UserName) ? "名前なし" : userData.UserName;
-                item.Name = userData.ID;
-                item.Tag = userData;
+                var item = listViewItems.Find(nodeData.Data.ID, false).FirstOrDefault() ?? listViewItems.Add("");
+                item.Text = string.IsNullOrWhiteSpace(nodeData.Data.UserName) ? "名前なし" : nodeData.Data.UserName;
+                item.SubItems.Add(nodeData.Comment);
+                item.Name = nodeData.Data.ID;
+                item.Tag = nodeData.Data;
 
                 if (item.Selected)
                 {
-                    OtherData = userData;
+                    OtherData = nodeData.Data;
                 }
             }
             finally
@@ -390,12 +340,12 @@ namespace DemoP2P
             }
         }
 
-        private void CheckDeleted(IEnumerable<(UserData, System.Net.IPEndPointCollection)> userDatas)
+        private void CheckDeleted(IEnumerable<LibP2P.PeerNodeData<UserData>> userDatas)
         {
             listViewOtherUser.BeginUpdate();
             try
             {
-                var existIDs = userDatas.Select(userData => userData.Item1.ID).ToList();
+                var existIDs = userDatas.Select(userData => userData.Data.ID).ToList();
                 listViewOtherUser.Items.Cast<ListViewItem>()
                     .Where(item => !existIDs.Contains(item.Name))
                     .ToList()
@@ -413,7 +363,66 @@ namespace DemoP2P
             buttonLoad.Text = bON ? "読み込み中" : "最新の情報に更新";
         }
 
-        #endregion
+        private PeerName GetInputPeerName()
+        {
+            if (IsTargetGrobal())
+            {
+                string peerHostName = GetInputPeerHostName();
+                if (string.IsNullOrWhiteSpace(peerHostName))
+                {
+                    MessageBox.Show(labelPeerHostName.Text + "を入力してください。", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    tabControl1.SelectedTab = tabPageSetting;
+                    textBoxPeerHostName.SelectAll();
+                    textBoxPeerHostName.Focus();
+                    return null;
+                }
+
+                return PeerName.CreateFromPeerHostName(peerHostName);
+            }
+            else
+            {
+                string classifier = GetInputClassifier();
+                if (string.IsNullOrWhiteSpace(classifier))
+                {
+                    MessageBox.Show(labelClassifier.Text + "を入力してください。", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    tabControl1.SelectedTab = tabPageSetting;
+                    textBoxClassifier.SelectAll();
+                    textBoxClassifier.Focus();
+                    return null;
+                }
+
+                return new PeerName(classifier, GetSelectedPeerNameType());
+            }
+        }
+
+        private void OnStart()
+        {
+            if (null == peerName || null == cloud) return;
+
+            AddLog(nameof(OnStart), null, peerName.ToString());
+            AddLog(nameof(OnStart), null, cloud.ToString());
+
+            OpenPeer();
+            RegistData();
+
+            UpdateUI();
+            buttonLoad.PerformClick();
+        }
+
+        private void OnStop()
+        {
+            ClosePeer();
+
+            OtherData = null;
+            listViewOtherUser.Items.Clear();
+            UpdateUI();
+        }
+
+        private void RegistData()
+        {
+            System.Diagnostics.Debug.Assert(register != null);
+            register.RegistData(MyData, textBoxComment.Text);
+        }
 
         #endregion
     }
