@@ -12,7 +12,14 @@ namespace RelationUnity
     {
         static async Task Main(string[] args)
         {
-            if (args.Length != 4) return;
+            if (args.Length != 4)
+            {
+#if DEBUG
+                Console.WriteLine("invalid arguments");
+                Console.ReadLine();
+#endif
+                return;
+            }
 
             string pipeName = args[0];
             string connectionTarget = args[1];
@@ -48,6 +55,7 @@ namespace RelationUnity
             {
 #if DEBUG
                 Console.WriteLine(ex);
+                Console.ReadLine();
 #endif
                 return;
             }
