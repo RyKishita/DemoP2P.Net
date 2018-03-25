@@ -12,18 +12,45 @@ namespace RelationUnity
     {
         static async Task Main(string[] args)
         {
-            if (args.Length != 3) return;
+            if (args.Length != 4) return;
 
             string pipeName = args[0];
-            string peerNameClassifier = args[1];
-            int portNo = int.Parse(args[2]);
+            string connectionTarget = args[1];
+            string portNoStr = args[2];
+            string param3 = args[3];
 
 #if DEBUG
-            Console.WriteLine($"{nameof(pipeName)}={pipeName},{nameof(peerNameClassifier)}={peerNameClassifier},{nameof(portNo)}={portNo}");
+            Console.WriteLine($"{nameof(pipeName)}={pipeName},{nameof(connectionTarget)}={connectionTarget},{nameof(portNoStr)}={portNoStr},{nameof(param3)}={param3}");
 #endif
 
-            var cloud = Cloud.AllLinkLocal;
-            var peerName = new PeerName(peerNameClassifier, PeerNameType.Secured);
+            int portNo;
+            PeerName peerName;
+            Cloud cloud;
+            try
+            {
+                portNo = int.Parse(portNoStr);
+
+                switch (connectionTarget.ToLower())
+                {
+                    case "global":
+                        cloud = Cloud.Global;
+                        peerName = PeerName.CreateFromPeerHostName(param3);
+                        break;
+                    case "local":
+                        cloud = Cloud.AllLinkLocal;
+                        peerName = new PeerName(param3, PeerNameType.Secured);
+                        break;
+                    default:
+                        throw new ArgumentException("invalid argument", "param 1");
+                }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                Console.WriteLine(ex);
+#endif
+                return;
+            }
 
             server = new NamedPipeServerStream(pipeName);
             try
