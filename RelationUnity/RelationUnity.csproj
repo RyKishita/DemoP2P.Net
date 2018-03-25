@@ -50,11 +50,5 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\LibP2P\LibP2P.csproj">
-      <Project>{66a69bc5-43ed-41c1-b5e0-5ea5d80ae443}</Project>
-      <Name>LibP2P</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
