@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PeerToPipe", "PeerToPipe\PeerToPipe.csproj", "{689483A1-7762-4507-B904-D9D3C597B04A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PipeToPeer", "PipeToPeer\PipeToPeer.csproj", "{2293DA2F-27DD-4016-BD9F-E473A0E5E884}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{689483A1-7762-4507-B904-D9D3C597B04A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{689483A1-7762-4507-B904-D9D3C597B04A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{689483A1-7762-4507-B904-D9D3C597B04A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{689483A1-7762-4507-B904-D9D3C597B04A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2293DA2F-27DD-4016-BD9F-E473A0E5E884}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2293DA2F-27DD-4016-BD9F-E473A0E5E884}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2293DA2F-27DD-4016-BD9F-E473A0E5E884}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2293DA2F-27DD-4016-BD9F-E473A0E5E884}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {25DDB497-960E-4229-9954-C708237C3682}
+	EndGlobalSection
+EndGlobal
