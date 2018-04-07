@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{29342D52-EF4B-4732-B892-3D6DE0582667}</ProjectGuid>
+    <ProjectGuid>{2293DA2F-27DD-4016-BD9F-E473A0E5E884}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>RelationUnity</RootNamespace>
-    <AssemblyName>RelationUnity</AssemblyName>
+    <RootNamespace>PipeToPeer</RootNamespace>
+    <AssemblyName>PipeToPeer</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -21,7 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
