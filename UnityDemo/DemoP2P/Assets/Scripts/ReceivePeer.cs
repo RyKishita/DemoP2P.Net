@@ -1,18 +1,16 @@
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO.Pipes;
 using UnityEngine;
 
 public class ReceivePeer : SingletonMonoBehaviour<ReceivePeer>
 {
-    public GameObject otherPlayer;
-
     Process process = null;
     NamedPipeServerStream namedPipePeerToPipe = null;
     NamedPipeServerStream namedPipePipeToPeer = null;
-    Dictionary<string, PlayerData> otherPlayerDatas = new Dictionary<string, PlayerData>();
-    Dictionary<string, OtherPlayerController> otherPlayers = new Dictionary<string, OtherPlayerController>();
+
+    public ConcurrentQueue<byte[]> Queue { get; private set; } = new ConcurrentQueue<byte[]>();
 
     protected override void Awake()
     {
@@ -38,9 +36,6 @@ public class ReceivePeer : SingletonMonoBehaviour<ReceivePeer>
                 FileName = System.IO.Path.Combine(Application.streamingAssetsPath, exeName),
                 Arguments = $"{pipeName} {settings.connectionTarget} {settings.portNo} {settings.param3}",
 #if !DEBUG
-                RedirectStandardInput = true,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
                 UseShellExecute = false,
                 CreateNoWindow = true
 #endif
@@ -84,56 +79,13 @@ public class ReceivePeer : SingletonMonoBehaviour<ReceivePeer>
                 var receiveBuffer = new byte[length];
                 Buffer.BlockCopy(readBuffer, 0, receiveBuffer, 0, length);
 
-                var data = Serializer.Deserialize<PlayerData>(receiveBuffer);
-                if (null != data)
-                {
-                    lock (otherPlayerDatas)
-                    {
-                        data.IsModify = true;
-                        otherPlayerDatas[data.ID] = data;
-                    }
-                }
+                Queue.Enqueue(receiveBuffer);
             }
         }
         finally
         {
             bReading = false;
             UnityEngine.Debug.Log("peer reading end");
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        var newPlayers = new List<PlayerData>();
-        lock (otherPlayerDatas)
-        {
-            string playerID = PlayerController.Instance.PlayerData.ID;
-            foreach (var pair in otherPlayerDatas)
-            {
-                if (pair.Key == playerID) continue;
-
-                OtherPlayerController otherplayer;
-                if (otherPlayers.TryGetValue(pair.Key, out otherplayer))
-                {
-                    if (pair.Value.IsModify)
-                    {
-                        pair.Value.IsModify = false;
-                        otherplayer.transform.position = new Vector3(pair.Value.X, otherplayer.transform.position.y, pair.Value.Z);
-                    }
-                }
-                else
-                {
-                    newPlayers.Add(pair.Value);
-                }
-            }
-        }
-
-        foreach (var playerdata in newPlayers)
-        {
-            var obj = Instantiate(otherPlayer, new Vector3(playerdata.X, otherPlayer.transform.position.y, playerdata.Z), Quaternion.identity);
-            var newOtherPlayer = obj.GetComponent<OtherPlayerController>();
-            newOtherPlayer.PlayerData = playerdata;
-            otherPlayers[playerdata.ID] = newOtherPlayer;
         }
     }
 
