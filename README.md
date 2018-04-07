@@ -13,11 +13,20 @@ P2P on .Net Framework
 
 成果としてサンプルプログラムを公開する。
 
-## 情報
+## 環境
 
 - Visual Studio 2012(for Windows Desktopも可)→Visual Studio 2017でのビルドと動作も確認した。
 - .Net Framework 4.5以降
   - APIの提供バージョン
+- Unity 2018.1.0b13 (64-bit)
+  - beta版を使ったが、途中までは 2017.3.1f1 で作っており、おそらくこれでも問題ない。
+
+## デモアプリ説明
+
+- WindowsDemo 以下は、WinFormで作ったアプリ。
+- UnityDemo 以下は、Unityで作ったアプリ。
+  - Libのビルドをして作ったEXEファイル2つを、UnityDemo\DemoP2P\Assets\StreamingAssets 以下に置く必要がある。
+  - 自分以外のプレイヤー位置に青キューブが表示される。
 - 動作確認
   - ローカルネットワーク内のマシン2台でそれぞれ起動はOK。
   - 1マシン内で複数起動はOK。
@@ -36,6 +45,7 @@ P2P on .Net Framework
     - ノードに持たせたいデータが制限を超えてもなんとか出来る。
       - もしくは、初めから制御用のデータのみにした方が良いと考えられる。
   - NAT超えの話があるのでIPv6を使いたいところだが、普及率がまだまだ。
+- MonoではSystem.Net.PeerToPeerが未対応。なので中継を行うコンソールアプリを作って実現。そのためWindowsでしか動かない。
 
 ## 課題
 
