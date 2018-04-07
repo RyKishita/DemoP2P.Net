@@ -66,7 +66,7 @@ namespace PeerToPipe
                         while (namedPipePipeToPeer.IsConnected && namedPipePeerToPipe.IsConnected)
                         {
                             int result = namedPipePipeToPeer.ReadByte();
-                            if (result < 0) throw new Exception("end of stream");
+                            if (result < 0) break;
 #if DEBUG
                             Console.WriteLine("read");
 #endif
