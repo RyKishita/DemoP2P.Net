@@ -27,14 +27,8 @@ public class PlayerController : SingletonMonoBehaviour<PlayerController>
 		Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
         GetComponent<Rigidbody>().velocity = movement * moveSpeed;
 
-        var pos = transform.position;
-        if (PlayerData.X != pos.x ||
-            PlayerData.Z != pos.z)
-        {
-            PlayerData.X = pos.x;
-            PlayerData.Z = pos.z;
-
-            SendPeer.Instance.Data = Serializer.Serialize(PlayerData);
-        }
+        PlayerData.X = transform.position.x;
+        PlayerData.Z = transform.position.z;
+        SendPeer.Instance.Data = Serializer.Serialize(PlayerData);
     }
 }

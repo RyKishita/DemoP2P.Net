@@ -28,17 +28,16 @@ public class SendPeer : SingletonMonoBehaviour<SendPeer>
             var settings = ConfigProvider.ConfigComponent.Settings;
             string pipeName = Guid.NewGuid().ToString();
 
+            var beginWaitForConnectionCallback = new AsyncCallback(result => (result.AsyncState as NamedPipeServerStream).EndWaitForConnection(result));
+
             namedPipe = new NamedPipeServerStream(pipeName);
-            namedPipe.BeginWaitForConnection(new AsyncCallback(result => (result.AsyncState as SendPeer).BeginWaitForConnectionCallback(result)), this);
+            namedPipe.BeginWaitForConnection(beginWaitForConnectionCallback, namedPipe);
 
             var info = new ProcessStartInfo()
             {
                 FileName = System.IO.Path.Combine(Application.streamingAssetsPath, exeName),
                 Arguments = $"{pipeName} {settings.connectionTarget} {settings.portNo} {settings.param3}",
 #if !DEBUG
-                RedirectStandardInput = true,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
                 UseShellExecute = false,
                 CreateNoWindow = true
 #endif
@@ -49,13 +48,6 @@ public class SendPeer : SingletonMonoBehaviour<SendPeer>
         {
             UnityEngine.Debug.LogException(ex);
         }
-    }
-
-    private void BeginWaitForConnectionCallback(IAsyncResult result)
-    {
-        namedPipe.EndWaitForConnection(result);
-
-        UnityEngine.Debug.Log(nameof(BeginWaitForConnectionCallback));
     }
 
     float updateTotalTime = 0.0f;

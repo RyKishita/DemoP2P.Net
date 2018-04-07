@@ -14,4 +14,4 @@ MonoBehaviour:
   connectionTarget: local
   portNo: 55555
   param3: PeerName
-  sendPositionInterval: 0.2
+  sendPositionInterval: 1
