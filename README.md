@@ -15,11 +15,10 @@ P2P on .Net Framework
 
 ## 環境
 
-- Visual Studio 2012(for Windows Desktopも可)→Visual Studio 2017でのビルドと動作も確認した。
+- Visual Studio Community 2017 Version 15.6.7
 - .Net Framework 4.5以降
   - APIの提供バージョン
-- Unity 2018.1.0b13 (64-bit)
-  - beta版を使ったが、途中までは 2017.3.1f1 で作っており、おそらくこれでも問題ない。
+- Unity 2018.1.0f2 (64-bit)
 
 ## デモアプリ説明
 
@@ -32,7 +31,7 @@ P2P on .Net Framework
   - 1マシン内で複数起動はOK。
   - グローバルのテストは行っていない。
 
-## API調査
+## 調査
 
 - 一つのノードが持てるデータは4096バイト+39文字(Unicode)
   - [PeerNameRecord.Data Property](https://docs.microsoft.com/ja-jp/dotnet/api/system.net.peertopeer.peernamerecord.data)
@@ -42,10 +41,11 @@ P2P on .Net Framework
 - 受信データPeerNameRecordが持つEndPointCollectionプロパティには、データ元のアドレスが設定されている。
   - 自分の環境ではIPv4とIPv6の2項目。
   - このアドレスを使えば直接やり取り出来る。
-    - ノードに持たせたいデータが制限を超えてもなんとか出来る。
-      - もしくは、初めから制御用のデータのみにした方が良いと考えられる。
+    - ノードに持たせたいデータが制限を超えても、これを使ってなんとか出来そう。
+      - もしくは、初めから制御用のデータのみ置くと考えたほうが良さそう。
   - NAT超えの話があるのでIPv6を使いたいところだが、普及率がまだまだ。
-- MonoではSystem.Net.PeerToPeerが未対応。なので中継を行うコンソールアプリを作って実現。そのためWindowsでしか動かない。
+- Unityで選択できるのは「.NET 4.x」「.NET Standard 2.0」となっている(Unity 2018.1 時点)。いずれもSystem.Net.PeerToPeerが未対応。
+  - 中継を行うコンソールアプリを作って実現。そのためWindowsでしか動かない。
 
 ## 課題
 
@@ -59,7 +59,7 @@ P2P on .Net Framework
     1. 一台立てたままにしておいて、IPアドレスを公開する。
     1. 自身に接続してきたIPアドレスを記録してリストを作成。接続者に渡す。接続側も持っていたら内容をマージする。
     1. 以降はその一覧を順に試行する。稼働時間や安定性などの情報を含めても良さそう。
-    1, ある程度普及したら、立てておいた一台目を止めてもいいかもしれない。
+    1. ある程度普及したら、立てておいた一台目を止めてもいいかもしれない。
 
 ## 連絡先
 
