@@ -15,10 +15,10 @@ P2P on .Net Framework
 
 ## 環境
 
-- Visual Studio Community 2017 Version 15.6.7
+- Visual Studio Community 2017 Version 15.9.4
 - .Net Framework 4.5以降
   - APIの提供バージョン
-- Unity 2018.1.0f2 (64-bit)
+- Unity 2018.3.0f2 (64-bit)
 
 ## デモアプリ説明
 
